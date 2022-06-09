@@ -1,0 +1,8 @@
+# Ignorar carpetas y archivos creados en compilación
+backup/
+lib/
+*.exe
+*.lps
+
+# Ignorar archivos de datos creados por el programa
+*.dat
