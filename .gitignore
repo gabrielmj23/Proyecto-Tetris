@@ -3,6 +3,8 @@ backup/
 lib/
 *.exe
 *.lps
+*.res
+*.ico
 
 # Ignorar archivos de datos creados por el programa
 *.dat
