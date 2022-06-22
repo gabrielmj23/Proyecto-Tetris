@@ -12,9 +12,12 @@ type
 
   TTetris = class(TForm)
     DatosJug: TLabel;
+    GrafTablero: TDrawGrid;
     Pantallas: TPageControl;
     PantJuego: TTabSheet;
     PantPrueba: TTabSheet;
+    procedure GrafTableroDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
     procedure PantJuegoShow(Sender: TObject);
   private
 
@@ -34,7 +37,6 @@ uses
 var
   JugActual: Jugador;
   Tablero: Array[1..12, 1..9] of Byte;
-  GrafTablero: Array[1..12, 1..9] of TImage;
 
 { TTetris }
 
@@ -56,12 +58,14 @@ begin
   // Limpiar tablero de Tetris
   for i := 1 to 12 do
     for j := 1 to 9 do
-      begin
-        Tablero[i,j] := 0;
-        // PENDIENTE: Dibujar tablero inicial
-      end;
+      Tablero[i,j] := 0;
 end;
 
+procedure TTetris.GrafTableroDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+begin
+
+end;
 
 end.
 

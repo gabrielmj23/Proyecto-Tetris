@@ -39,9 +39,10 @@
       <Unit1>
         <Filename Value="tetris.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="Tetris"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Tetris"/>
+        <UnitName Value="FTetris"/>
       </Unit1>
     </Units>
   </ProjectOptions>
