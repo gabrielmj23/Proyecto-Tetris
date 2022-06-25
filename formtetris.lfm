@@ -66,16 +66,17 @@ object Tetris: TTetris
         ParentColor = False
         ParentFont = False
       end
-      object ImgNuevaPieza: TImage
-        Left = 864
-        Height = 175
+      object ImgSigPieza: TImage
+        Left = 875
+        Height = 200
         Top = 262
-        Width = 217
+        Width = 200
+        Proportional = True
       end
       object MensajeODS: TLabel
-        Left = 765
+        Left = 768
         Height = 28
-        Top = 495
+        Top = 520
         Width = 110
         Caption = 'MensajeODS'
         Font.CharSet = ANSI_CHARSET
@@ -90,9 +91,9 @@ object Tetris: TTetris
       end
       object ImgODS: TImage
         Left = 1000
-        Height = 186
-        Top = 485
-        Width = 218
+        Height = 220
+        Top = 512
+        Width = 220
       end
       object BordeTab: TShape
         Left = 235

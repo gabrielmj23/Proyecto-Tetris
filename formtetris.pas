@@ -11,7 +11,7 @@ type
   { TTetris }
   TTetris = class(TForm)
     ImgODS: TImage;
-    ImgNuevaPieza: TImage;
+    ImgSigPieza: TImage;
     MensajeODS: TLabel;
     BordeTab: TShape;
     TxtSiguiente: TLabel;
@@ -41,6 +41,7 @@ var
   Tablero: Array[1..12, 1..9] of Byte;
   GrafTablero: Array[1..12, 1..9] of TImage;
   Puntaje: DWord;
+  IdSigPieza: Byte;
 
 procedure MostrarCeldas();
 const
@@ -77,6 +78,27 @@ begin
         end;
         GrafTablero[i,j].Picture.LoadFromFile(ArchivoImg);
       end;
+end;
+
+procedure MostrarSigPieza();
+var
+  ArchivoImg: String;
+begin
+  ArchivoImg := 'img/piezas/';
+  // Seleccionar archivo
+  case IdSigPieza of
+    1: ArchivoImg := ArchivoImg + 'pieza1.png';
+    2: ArchivoImg := ArchivoImg + 'pieza2.png';
+    3: ArchivoImg := ArchivoImg + 'pieza3.png';
+    4: ArchivoImg := ArchivoImg + 'pieza4.png';
+    5: ArchivoImg := ArchivoImg + 'pieza5.png';
+    6: ArchivoImg := ArchivoImg + 'pieza6.png';
+    7: ArchivoImg := ArchivoImg + 'pieza7.png';
+    8: ArchivoImg := ArchivoImg + 'pieza8.png';
+  end;
+  // Cargar imagen
+  Tetris.ImgSigPieza.Picture.LoadFromFile(ArchivoImg);
+  // PENDIENTE: Mostrar ODS asociado con su imagen respectiva
 end;
 
 function LimpiarFilas(): DWord;
@@ -145,6 +167,9 @@ begin
   //Inicializar puntaje
   Puntaje := 0;
   TextoPuntaje.Caption := 'Puntaje: ' + IntToStr(Puntaje);
+  // PRUEBAS: Generar primera pieza y siguiente pieza
+  IdSigPieza := 8;
+  MostrarSigPieza();
 end;
 
 
