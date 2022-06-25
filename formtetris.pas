@@ -79,6 +79,41 @@ begin
       end;
 end;
 
+function LimpiarFilas(): DWord;
+var
+  i, j, k, PuntosFil: Byte;
+  Completa: Boolean;
+begin
+  LimpiarFilas := 0;
+  i := 12;
+  // Revisar cada fila
+  while i > 0 do
+    begin
+      PuntosFil := 0;
+      Completa := True;
+      for j := 1 to 9 do
+        begin
+          PuntosFil := PuntosFil + Tablero[i,j];
+          if Tablero[i,j] = 0 then
+            Completa := False;
+        end;
+      if Completa then
+        begin
+          // Bajar filas superiores
+          for j := i downto 1 do
+            for k := 1 to 9 do
+              if j = 1 then
+                Tablero[j,k] := 0
+              else
+                Tablero[j,k] := Tablero[j-1,k];
+          // Aumentar puntaje total a sumar
+          LimpiarFilas := LimpiarFilas + PuntosFil * 100;
+        end
+      else
+        i := i - 1;
+    end;
+end;
+
 procedure TTetris.PantJuegoShow(Sender: TObject);
 var
   Formato: String;
