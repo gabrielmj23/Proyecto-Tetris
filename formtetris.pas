@@ -4,13 +4,17 @@ unit FormTetris;
 interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  Grids, ExtCtrls, Types;
+  ExtCtrls, Types;
 
 type
 
   { TTetris }
   TTetris = class(TForm)
-    Image1: TImage;
+    ImgODS: TImage;
+    ImgNuevaPieza: TImage;
+    MensajeODS: TLabel;
+    TxtSiguiente: TLabel;
+    TextoPuntaje: TLabel;
     Pantallas: TPageControl;
     PantJuego: TTabSheet;
     PantPrueba: TTabSheet;
@@ -35,11 +39,12 @@ var
   JugActual: Jugador;
   Tablero: Array[1..12, 1..9] of Byte;
   GrafTablero: Array[1..12, 1..9] of TImage;
+  Puntaje: DWord;
 
 procedure MostrarCeldas();
 const
   LeftEsquina = 240;
-  TopEsquina = 100;
+  TopEsquina = 140;
 var
   i, j: Byte;
   ArchivoImg: String[23];
@@ -99,6 +104,9 @@ begin
   Tablero[1,6] := 7;
   Tablero[1,7] := 8;
   MostrarCeldas();
+  //Inicializar puntaje
+  Puntaje := 0;
+  TextoPuntaje.Caption := 'Puntaje: ' + IntToStr(Puntaje);
 end;
 
 
