@@ -13,6 +13,7 @@ type
     ImgODS: TImage;
     ImgNuevaPieza: TImage;
     MensajeODS: TLabel;
+    BordeTab: TShape;
     TxtSiguiente: TLabel;
     TextoPuntaje: TLabel;
     Pantallas: TPageControl;
@@ -64,6 +65,7 @@ begin
         // Cargar imagen según valor en tablero
         ArchivoImg := 'img/bloques/';
         case Tablero[i,j] of
+          0: ArchivoImg := ArchivoImg + 'vacio.png';
           1: ArchivoImg := ArchivoImg + 'bloque1.png';
           2: ArchivoImg := ArchivoImg + 'bloque2.png';
           3: ArchivoImg := ArchivoImg + 'bloque3.png';
@@ -103,6 +105,7 @@ begin
   Tablero[1,5] := 6;
   Tablero[1,6] := 7;
   Tablero[1,7] := 8;
+  Tablero[1,8] := 0;
   MostrarCeldas();
   //Inicializar puntaje
   Puntaje := 0;

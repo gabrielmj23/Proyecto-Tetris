@@ -94,6 +94,13 @@ object Tetris: TTetris
         Top = 485
         Width = 218
       end
+      object BordeTab: TShape
+        Left = 235
+        Height = 610
+        Top = 135
+        Width = 460
+        Brush.Color = clGray
+      end
     end
     object PantPrueba: TTabSheet
       Caption = 'PantPrueba'
