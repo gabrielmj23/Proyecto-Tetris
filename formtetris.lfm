@@ -1,0 +1,110 @@
+object Tetris: TTetris
+  Left = 306
+  Height = 814
+  Top = 148
+  Width = 1392
+  Caption = 'Tetris'
+  ClientHeight = 814
+  ClientWidth = 1392
+  DesignTimePPI = 120
+  LCLVersion = '2.0.12.0'
+  object Pantallas: TPageControl
+    Left = 3
+    Height = 812
+    Top = 3
+    Width = 1389
+    ActivePage = PantJuego
+    TabIndex = 0
+    TabOrder = 0
+    object PantJuego: TTabSheet
+      Caption = 'PantJuego'
+      ClientHeight = 779
+      ClientWidth = 1381
+      OnShow = PantJuegoShow
+      object DatosJug: TStaticText
+        Left = 220
+        Height = 27
+        Top = 8
+        Width = 1048
+        Caption = 'DatosJug'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -20
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentFont = False
+        TabOrder = 0
+      end
+      object TextoPuntaje: TLabel
+        Left = 749
+        Height = 24
+        Top = 140
+        Width = 168
+        Caption = 'TextoPuntaje'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -23
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
+      end
+      object TxtSiguiente: TLabel
+        Left = 879
+        Height = 23
+        Top = 224
+        Width = 192
+        Caption = 'Siguiente pieza:'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -20
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
+      end
+      object ImgSigPieza: TImage
+        Left = 875
+        Height = 200
+        Top = 262
+        Width = 200
+        Proportional = True
+      end
+      object MensajeODS: TLabel
+        Left = 768
+        Height = 28
+        Top = 520
+        Width = 110
+        Caption = 'MensajeODS'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -20
+        Font.Name = 'Segoe UI'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsItalic]
+        ParentColor = False
+        ParentFont = False
+      end
+      object ImgODS: TImage
+        Left = 1000
+        Height = 220
+        Top = 512
+        Width = 220
+      end
+      object BordeTab: TShape
+        Left = 235
+        Height = 610
+        Top = 135
+        Width = 460
+        Brush.Color = clGray
+      end
+    end
+    object PantPrueba: TTabSheet
+      Caption = 'PantPrueba'
+    end
+  end
+end

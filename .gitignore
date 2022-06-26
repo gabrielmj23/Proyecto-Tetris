@@ -8,3 +8,6 @@ lib/
 
 # Ignorar archivos de datos creados por el programa
 *.dat
+
+# Ignorar archivos creados durante el desarrollo de las imágenes
+*.xcf
