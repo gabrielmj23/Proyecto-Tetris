@@ -18,13 +18,12 @@ implementation
   var
     HayGuardados: Boolean;
   begin
+    HayGuardados := True;
     // Abrir archivo
     assignFile(Juegos, 'Juegos.dat');
-    {$I-}
-    reset(Juegos);
-    {$I+}
-    HayGuardados := True;
-    if IOResult <> 0 then
+    if FileExists('Juegos.dat') then
+      reset(Juegos)
+    else
       begin
         rewrite(Juegos);
         HayGuardados := False;
@@ -54,10 +53,9 @@ implementation
 
     // Abrir archivo
     assignFile(Juegos, 'Juegos.dat');
-    {$I-}
-    reset(Juegos);
-    {$I+}
-    if IOResult <> 0 then
+    if FileExists('Juegos.dat') then
+      reset(Juegos)
+    else
       rewrite(Juegos);
 
     // Determinar fecha y hora actual

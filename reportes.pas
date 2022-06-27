@@ -6,7 +6,7 @@ interface
 
 // Privado ---------------------------------------------------------------------
 implementation
-  uses tiposYConst;
+  uses tiposYConst, sysutils;
 
   function puntosJugador(Usuario: String): DWord;
   var
@@ -16,10 +16,9 @@ implementation
     puntosJugador := 0;
     // Abrir archivo
     assignFile(Juegos,'Juegos.dat');
-    {$I-}
-    reset(Juegos);
-    {$I+}
-    if IOResult <> 0 then
+    if FileExists('Juegos.dat') then
+      reset(Juegos)
+    else
       rewrite(Juegos);
 
     // Buscar juegos del usuario indicado y acumular puntajes
