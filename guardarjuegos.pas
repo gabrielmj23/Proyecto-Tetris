@@ -4,11 +4,11 @@ unit guardarJuegos;
 interface
   function generarCodigoJuego(): DWord;
 
-  procedure guardarJuego(Usuario: String; PtsGanados: DWord);
+  procedure guardarJuego(Participante: String; PtsJuego: DWord);
 
 // Privado ---------------------------------------------------------------------
 implementation
-  uses tiposYConst;
+  uses tiposYConst, sysutils;
 
   var
     Juegos: File of Juego;
@@ -43,9 +43,11 @@ implementation
     closeFile(Juegos);
   end;
 
-  procedure guardarJuego(Usuario: String; PtsGanados: DWord);
+  procedure guardarJuego(Participante: String; PtsJuego: DWord);
   var
     CodJuego: DWord;
+    FechaAct: String[10];
+    HoraAct: String[8];
   begin
     // Generar código para guardar la partida
     CodJuego := generarCodigoJuego();
@@ -58,13 +60,19 @@ implementation
     if IOResult <> 0 then
       rewrite(Juegos);
 
+    // Determinar fecha y hora actual
+    FechaAct := FormatDateTime('dd/mm/yyyy', Now);
+    HoraAct := FormatDateTime('hh:nn:ss', Now);
+
     // Almacenar partida
     seek(Juegos, filesize(Juegos));
     with JuegoAct do
       begin
         Codigo := CodJuego;
-        Usuario := Usuario;
-        PtsGanados := PtsGanados;
+        Usuario := Participante;
+        Fecha := FechaAct;
+        Hora := HoraAct;
+        PtsGanados := PtsJuego;
         write(Juegos, JuegoAct);
       end;
 

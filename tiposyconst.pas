@@ -6,6 +6,8 @@ interface
     Juego = Record
               Codigo: DWord;
               Usuario: String[12];
+              Fecha: String[10];
+              Hora: String[8];
               PtsGanados: DWord;
             end;
 
