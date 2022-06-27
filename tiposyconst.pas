@@ -17,7 +17,6 @@ interface
                 Clave: String[10];
                 Correo: String[30];
                 IndPais: Byte;
-                PtsAcum: DWord;
               end;
 
   const

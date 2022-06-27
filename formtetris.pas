@@ -34,7 +34,7 @@ implementation
 {$R *.lfm}
 
 uses
-  tiposYConst, guardarJuegos;
+  tiposYConst, guardarJuegos, reportes;
 
 var
   JugActual: Jugador;
@@ -147,9 +147,8 @@ begin
       NombreComp := 'Nombre';
       Usuario := 'Usuario';
       IndPais := 3;
-      PtsAcum := 0;
       Formato := 'Jugador: %0:-S (%1:-S)   Pais: %2:-S   Puntos acumulados: %3-D';
-      DatosJug.Caption := Format(Formato, [NombreComp, Usuario, CodPaises[IndPais], PtsAcum]);
+      DatosJug.Caption := Format(Formato, [NombreComp, Usuario, CodPaises[IndPais], puntosJugador(Usuario)]);
     end;
   // Limpiar tablero de Tetris y mostrar
   for i := 1 to 12 do
