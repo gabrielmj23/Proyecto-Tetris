@@ -4,22 +4,57 @@ unit FormTetris;
 interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, Types;
+  ExtCtrls, CheckLst, Types;
 
 type
 
   { TTetris }
   TTetris = class(TForm)
+    BRegistrar: TButton;
+    BInicioSesion: TButton;
+    BRegistrarse: TButton;
+    BEstadisticas: TButton;
+    BReporteGlobal1: TButton;
+    BReporteGlobal2: TButton;
+    BReporteGlobal3: TButton;
+    BReporteGlobal4: TButton;
+    BSalir: TButton;
+    BReporteGlobal: TButton;
+    Bvolver: TButton;
+    BConfirmar: TButton;
+    Bvolver1: TButton;
+    Bvolver2: TButton;
+    campo_usuario: TEdit;
+    Campo_clave: TEdit;
+    Campo_NombreC: TEdit;
+    campo_UsuarioR: TEdit;
+    campo_correo: TEdit;
+    Campo_claveR: TEdit;
+    ListaPaises: TCheckListBox;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    i_USUARIO: TImage;
     ImgODS: TImage;
     ImgSigPieza: TImage;
     MensajeODS: TLabel;
     BordeTab: TShape;
+    PantallaInicial: TTabSheet;
+    inicioSesion: TTabSheet;
+    Registracion: TTabSheet;
+    Estadisticas: TTabSheet;
     TxtSiguiente: TLabel;
     TextoPuntaje: TLabel;
     Pantallas: TPageControl;
     PantJuego: TTabSheet;
     PantPrueba: TTabSheet;
     DatosJug: TStaticText;
+    procedure BInicioSesionClick(Sender: TObject);
+    procedure BRegistrarseClick(Sender: TObject);
+    procedure BvolverClick(Sender: TObject);
+    procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantJuegoShow(Sender: TObject);
   private
 
@@ -145,10 +180,10 @@ begin
   with JugActual do
     begin
       NombreComp := 'Nombre';
-      Usuario := 'Usuario';
+      USUARIO := 'Usuario';
       IndPais := 3;
       Formato := 'Jugador: %0:-S (%1:-S)   Pais: %2:-S   Puntos acumulados: %3-D';
-      DatosJug.Caption := Format(Formato, [NombreComp, Usuario, CodPaises[IndPais], puntosJugador(Usuario)]);
+      DatosJug.Caption := Format(Formato, [NombreComp, USUARIO, CodPaises[IndPais], puntosJugador(USUARIO)]);
     end;
   // Limpiar tablero de Tetris y mostrar
   for i := 1 to 12 do
@@ -170,6 +205,37 @@ begin
   IdSigPieza := 8;
   MostrarSigPieza();
 end;
+
+procedure TTetris.BInicioSesionClick(Sender: TObject);
+begin
+ inicioSesion.show;
+end;
+
+procedure TTetris.BRegistrarseClick(Sender: TObject);
+begin
+  registracion.show;
+end;
+
+procedure TTetris.BvolverClick(Sender: TObject);
+begin
+ PantallaInicial.show;
+end;
+
+procedure TTetris.ListaPaisesItemClick(Sender: TObject; Index: integer);
+  var
+  Contador : integer;
+begin
+  ListaPaises:=TCheckListBox(Sender);
+  for Contador:= 0 to ListaPaises.Items.Count-1 do
+    begin
+      if (Contador<>Index) then
+        ListaPaises.Checked[Contador]:= false;
+    end;
+end;
+
+
+
+
 
 
 end.
