@@ -12,9 +12,9 @@ object Tetris: TTetris
     Height = 650
     Top = 8
     Width = 1111
-    ActivePage = Estadisticas
+    ActivePage = PantJuego
     ParentFont = False
-    TabIndex = 5
+    TabIndex = 3
     TabOrder = 0
     object PantallaInicial: TTabSheet
       Caption = 'PantallaInicial'
@@ -316,36 +316,36 @@ object Tetris: TTetris
         Caption = 'Reporte Global'
         TabOrder = 0
       end
-      object BReporteGlobal1: TButton
+      object BReportePais: TButton
         Left = 432
         Height = 42
         Top = 288
         Width = 201
-        Caption = 'Reporte Global'
+        Caption = 'Reporte de País'
         TabOrder = 1
       end
-      object BReporteGlobal2: TButton
+      object BReporteJug: TButton
         Left = 432
         Height = 42
         Top = 352
         Width = 201
-        Caption = 'Reporte Global'
+        Caption = 'Reporte de Jugador'
         TabOrder = 2
       end
-      object BReporteGlobal3: TButton
+      object BTop5Global: TButton
         Left = 432
         Height = 42
         Top = 416
         Width = 201
-        Caption = 'Reporte Global'
+        Caption = 'Top 5 Global'
         TabOrder = 3
       end
-      object BReporteGlobal4: TButton
+      object BTop5Pais: TButton
         Left = 432
         Height = 42
         Top = 480
         Width = 201
-        Caption = 'Reporte Global'
+        Caption = 'Top 5 País'
         TabOrder = 4
       end
       object Bvolver2: TButton

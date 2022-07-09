@@ -14,10 +14,10 @@ type
     BInicioSesion: TButton;
     BRegistrarse: TButton;
     BEstadisticas: TButton;
-    BReporteGlobal1: TButton;
-    BReporteGlobal2: TButton;
-    BReporteGlobal3: TButton;
-    BReporteGlobal4: TButton;
+    BReportePais: TButton;
+    BReporteJug: TButton;
+    BTop5Global: TButton;
+    BTop5Pais: TButton;
     BSalir: TButton;
     BReporteGlobal: TButton;
     Bvolver: TButton;
