@@ -1,35 +1,232 @@
 object Tetris: TTetris
-  Left = 306
-  Height = 814
-  Top = 148
-  Width = 1392
+  Left = 197
+  Height = 692
+  Top = 27
+  Width = 1131
   Caption = 'Tetris'
-  ClientHeight = 814
-  ClientWidth = 1392
-  DesignTimePPI = 120
+  ClientHeight = 692
+  ClientWidth = 1131
   LCLVersion = '2.0.12.0'
   object Pantallas: TPageControl
-    Left = 3
-    Height = 812
-    Top = 3
-    Width = 1389
+    Left = 8
+    Height = 650
+    Top = 8
+    Width = 1111
     ActivePage = PantJuego
-    TabIndex = 0
+    ParentFont = False
+    TabIndex = 3
     TabOrder = 0
+    object PantallaInicial: TTabSheet
+      Caption = 'PantallaInicial'
+      ClientHeight = 622
+      ClientWidth = 1103
+      object BInicioSesion: TButton
+        Left = 440
+        Height = 41
+        Top = 288
+        Width = 187
+        Caption = 'Iniciar Sesión'
+        OnClick = BInicioSesionClick
+        TabOrder = 0
+      end
+      object BRegistrarse: TButton
+        Left = 440
+        Height = 41
+        Top = 360
+        Width = 187
+        Caption = 'Registrarse'
+        OnClick = BRegistrarseClick
+        TabOrder = 1
+      end
+      object BEstadisticas: TButton
+        Left = 440
+        Height = 41
+        Top = 432
+        Width = 187
+        Caption = 'Estadísticas'
+        TabOrder = 2
+      end
+      object BSalir: TButton
+        Left = 488
+        Height = 25
+        Top = 496
+        Width = 90
+        Caption = 'Salir'
+        TabOrder = 3
+      end
+    end
+    object inicioSesion: TTabSheet
+      Caption = 'inicioSesion'
+      ClientHeight = 622
+      ClientWidth = 1103
+      object campo_usuario: TEdit
+        Left = 512
+        Height = 23
+        Top = 288
+        Width = 136
+        MaxLength = 12
+        TabOrder = 0
+      end
+      object i_USUARIO: TImage
+        Left = 304
+        Height = 27
+        Top = 284
+        Width = 180
+      end
+      object Campo_clave: TEdit
+        Left = 512
+        Height = 23
+        Top = 324
+        Width = 136
+        EchoMode = emPassword
+        MaxLength = 12
+        PasswordChar = '*'
+        TabOrder = 1
+      end
+      object Image1: TImage
+        Left = 303
+        Height = 27
+        Top = 320
+        Width = 181
+      end
+      object BConfirmar: TButton
+        Left = 440
+        Height = 32
+        Top = 400
+        Width = 146
+        Caption = 'Iniciar Sesión'
+        TabOrder = 2
+      end
+      object Bvolver: TButton
+        Left = 440
+        Height = 32
+        Top = 448
+        Width = 145
+        Caption = 'Volver'
+        OnClick = BvolverClick
+        TabOrder = 3
+      end
+    end
+    object Registracion: TTabSheet
+      Caption = 'Registracion'
+      ClientHeight = 622
+      ClientWidth = 1103
+      object Campo_NombreC: TEdit
+        Left = 503
+        Height = 23
+        Top = 136
+        Width = 234
+        TabOrder = 0
+      end
+      object BRegistrar: TButton
+        Left = 440
+        Height = 32
+        Top = 440
+        Width = 146
+        Caption = 'Registrar'
+        TabOrder = 1
+      end
+      object campo_UsuarioR: TEdit
+        Left = 504
+        Height = 23
+        Top = 184
+        Width = 233
+        MaxLength = 12
+        TabOrder = 2
+      end
+      object campo_correo: TEdit
+        Left = 504
+        Height = 23
+        Top = 232
+        Width = 233
+        TabOrder = 3
+      end
+      object Campo_claveR: TEdit
+        Left = 504
+        Height = 23
+        Top = 280
+        Width = 233
+        EchoMode = emPassword
+        MaxLength = 12
+        PasswordChar = '*'
+        TabOrder = 4
+      end
+      object Bvolver1: TButton
+        Left = 440
+        Height = 32
+        Top = 480
+        Width = 145
+        Caption = 'Volver'
+        OnClick = BvolverClick
+        TabOrder = 5
+      end
+      object Image2: TImage
+        Left = 261
+        Height = 27
+        Top = 132
+        Width = 202
+      end
+      object Image3: TImage
+        Left = 261
+        Height = 27
+        Top = 180
+        Width = 202
+      end
+      object Image4: TImage
+        Left = 261
+        Height = 27
+        Top = 228
+        Width = 202
+      end
+      object Image5: TImage
+        Left = 261
+        Height = 27
+        Top = 276
+        Width = 202
+      end
+      object ListaPaises: TCheckListBox
+        Left = 504
+        Height = 64
+        Top = 320
+        Width = 234
+        Items.Strings = (
+          'Argentina'
+          'Bolivia'
+          'Brasil'
+          'Chile'
+          'Colombia'
+          'Ecuador'
+          'Guyana'
+          'Paraguay'
+          'Peru'
+          'Surinam'
+          'Trinidad y Tobago'
+          'Uruguay'
+          'Venezuela'
+        )
+        ItemHeight = 17
+        OnItemClick = ListaPaisesItemClick
+        TabOrder = 6
+        Data = {
+          0D00000000000000000000000000000000
+        }
+      end
+    end
     object PantJuego: TTabSheet
       Caption = 'PantJuego'
-      ClientHeight = 779
-      ClientWidth = 1381
+      ClientHeight = 622
+      ClientWidth = 1103
       OnShow = PantJuegoShow
+      ParentFont = False
       object DatosJug: TStaticText
-        Left = 220
-        Height = 27
-        Top = 8
-        Width = 1048
+        Left = 176
+        Height = 22
+        Top = 6
+        Width = 838
         Caption = 'DatosJug'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -20
+        Font.Height = -16
         Font.Name = 'OCR A Extended'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -37,14 +234,14 @@ object Tetris: TTetris
         TabOrder = 0
       end
       object TextoPuntaje: TLabel
-        Left = 749
-        Height = 24
-        Top = 140
-        Width = 168
+        Left = 599
+        Height = 19
+        Top = 112
+        Width = 132
         Caption = 'TextoPuntaje'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -23
+        Font.Height = -18
         Font.Name = 'OCR A Extended'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -52,14 +249,14 @@ object Tetris: TTetris
         ParentFont = False
       end
       object TxtSiguiente: TLabel
-        Left = 879
-        Height = 23
-        Top = 224
-        Width = 192
+        Left = 703
+        Height = 17
+        Top = 179
+        Width = 160
         Caption = 'Siguiente pieza:'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -20
+        Font.Height = -16
         Font.Name = 'OCR A Extended'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -67,21 +264,21 @@ object Tetris: TTetris
         ParentFont = False
       end
       object ImgSigPieza: TImage
-        Left = 875
-        Height = 200
-        Top = 262
-        Width = 200
+        Left = 700
+        Height = 160
+        Top = 210
+        Width = 160
         Proportional = True
       end
       object MensajeODS: TLabel
-        Left = 768
-        Height = 28
-        Top = 520
-        Width = 110
+        Left = 614
+        Height = 21
+        Top = 416
+        Width = 88
         Caption = 'MensajeODS'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
-        Font.Height = -20
+        Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -90,21 +287,76 @@ object Tetris: TTetris
         ParentFont = False
       end
       object ImgODS: TImage
-        Left = 1000
-        Height = 220
-        Top = 512
-        Width = 220
+        Left = 800
+        Height = 176
+        Top = 410
+        Width = 176
       end
       object BordeTab: TShape
-        Left = 235
-        Height = 610
-        Top = 135
-        Width = 460
+        Left = 188
+        Height = 488
+        Top = 108
+        Width = 368
         Brush.Color = clGray
       end
     end
     object PantPrueba: TTabSheet
       Caption = 'PantPrueba'
+      ParentFont = False
+    end
+    object Estadisticas: TTabSheet
+      Caption = 'Estadisticas'
+      ClientHeight = 622
+      ClientWidth = 1103
+      object BReporteGlobal: TButton
+        Left = 432
+        Height = 42
+        Top = 224
+        Width = 201
+        Caption = 'Reporte Global'
+        TabOrder = 0
+      end
+      object BReportePais: TButton
+        Left = 432
+        Height = 42
+        Top = 288
+        Width = 201
+        Caption = 'Reporte de País'
+        TabOrder = 1
+      end
+      object BReporteJug: TButton
+        Left = 432
+        Height = 42
+        Top = 352
+        Width = 201
+        Caption = 'Reporte de Jugador'
+        TabOrder = 2
+      end
+      object BTop5Global: TButton
+        Left = 432
+        Height = 42
+        Top = 416
+        Width = 201
+        Caption = 'Top 5 Global'
+        TabOrder = 3
+      end
+      object BTop5Pais: TButton
+        Left = 432
+        Height = 42
+        Top = 480
+        Width = 201
+        Caption = 'Top 5 País'
+        TabOrder = 4
+      end
+      object Bvolver2: TButton
+        Left = 464
+        Height = 32
+        Top = 544
+        Width = 145
+        Caption = 'Volver'
+        OnClick = BvolverClick
+        TabOrder = 5
+      end
     end
   end
 end
