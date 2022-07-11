@@ -6,21 +6,21 @@ object Tetris: TTetris
   Caption = 'Tetris'
   ClientHeight = 814
   ClientWidth = 1392
+  DesignTimePPI = 120
+  OnCreate = FormCreate
   LCLVersion = '2.0.12.0'
   object Pantallas: TPageControl
     Left = 3
-    Height = 812
-    Top = 3
+    Height = 815
+    Top = 0
     Width = 1389
-    ActivePage = PantJuego
-    ShowTabs = False
-    ParentFont = False
-    TabIndex = 3
+    ActivePage = PantallaInicial
+    TabIndex = 0
     TabOrder = 0
     object PantallaInicial: TTabSheet
       Caption = 'PantallaInicial'
-      ClientHeight = 622
-      ClientWidth = 1103
+      ClientHeight = 782
+      ClientWidth = 1381
       object BInicioSesion: TButton
         Left = 440
         Height = 41
@@ -58,11 +58,11 @@ object Tetris: TTetris
     end
     object inicioSesion: TTabSheet
       Caption = 'inicioSesion'
-      ClientHeight = 622
-      ClientWidth = 1103
+      ClientHeight = 782
+      ClientWidth = 1381
       object campo_usuario: TEdit
         Left = 512
-        Height = 23
+        Height = 28
         Top = 288
         Width = 136
         MaxLength = 12
@@ -76,7 +76,7 @@ object Tetris: TTetris
       end
       object Campo_clave: TEdit
         Left = 512
-        Height = 23
+        Height = 28
         Top = 324
         Width = 136
         EchoMode = emPassword
@@ -110,11 +110,11 @@ object Tetris: TTetris
     end
     object Registracion: TTabSheet
       Caption = 'Registracion'
-      ClientHeight = 622
-      ClientWidth = 1103
+      ClientHeight = 782
+      ClientWidth = 1381
       object Campo_NombreC: TEdit
         Left = 503
-        Height = 23
+        Height = 28
         Top = 136
         Width = 234
         TabOrder = 0
@@ -129,7 +129,7 @@ object Tetris: TTetris
       end
       object campo_UsuarioR: TEdit
         Left = 504
-        Height = 23
+        Height = 28
         Top = 184
         Width = 233
         MaxLength = 12
@@ -137,14 +137,14 @@ object Tetris: TTetris
       end
       object campo_correo: TEdit
         Left = 504
-        Height = 23
+        Height = 28
         Top = 232
         Width = 233
         TabOrder = 3
       end
       object Campo_claveR: TEdit
         Left = 504
-        Height = 23
+        Height = 28
         Top = 280
         Width = 233
         EchoMode = emPassword
@@ -205,7 +205,7 @@ object Tetris: TTetris
           'Uruguay'
           'Venezuela'
         )
-        ItemHeight = 17
+        ItemHeight = 21
         OnItemClick = ListaPaisesItemClick
         TabOrder = 6
         Data = {
@@ -215,10 +215,16 @@ object Tetris: TTetris
     end
     object PantJuego: TTabSheet
       Caption = 'PantJuego'
-      ClientHeight = 804
+      ClientHeight = 782
       ClientWidth = 1381
       OnShow = PantJuegoShow
-      ParentFont = False
+      object FondoJuego: TImage
+        Left = 0
+        Height = 782
+        Top = 0
+        Width = 1379
+        Stretch = True
+      end
       object TextoPuntaje: TLabel
         Left = 749
         Height = 24
@@ -255,6 +261,24 @@ object Tetris: TTetris
         Top = 262
         Width = 200
         Proportional = True
+      end
+      object TituloODS: TLabel
+        Left = 768
+        Height = 30
+        Top = 520
+        Width = 107
+        Caption = 'TituloODS'
+        Constraints.MaxWidth = 300
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -22
+        Font.Name = 'Segoe UI'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold, fsItalic]
+        ParentColor = False
+        ParentFont = False
+        WordWrap = True
       end
       object ImgODS: TImage
         Left = 1064
@@ -294,11 +318,57 @@ object Tetris: TTetris
         Font.Quality = fqDraft
         ParentColor = False
         ParentFont = False
+      end
+      object TxtRestante: TLabel
+        Left = 432
+        Height = 23
+        Top = 80
+        Width = 132
+        Caption = 'TxtRestante'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -20
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
+      end
+      object BordeCont: TShape
+        Left = 640
+        Height = 69
+        Top = 59
+        Width = 94
+        Brush.Color = 9079296
+        Brush.Style = bsClear
+        Pen.Color = 1381806
+        Pen.EndCap = pecFlat
+        Pen.JoinStyle = pjsBevel
+        Pen.Width = 6
+      end
+      object NRest: TLabel
+        Left = 658
+        Height = 40
+        Top = 72
+        Width = 60
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'NRest'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -30
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Layout = tlCenter
+        ParentColor = False
+        ParentFont = False
+      end
     end
     object Estadisticas: TTabSheet
       Caption = 'Estadisticas'
-      ClientHeight = 622
-      ClientWidth = 1103
+      ClientHeight = 782
+      ClientWidth = 1381
       object BReporteGlobal: TButton
         Left = 432
         Height = 42
@@ -349,5 +419,11 @@ object Tetris: TTetris
         TabOrder = 5
       end
     end
+  end
+  object TimerJuego: TTimer
+    Enabled = False
+    OnTimer = TimerJuegoTimer
+    Left = 752
+    Top = 112
   end
 end
