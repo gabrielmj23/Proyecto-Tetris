@@ -40,7 +40,6 @@ type
     ImgODS: TImage;
     ImgSigPieza: TImage;
     MensajeODS: TLabel;
-    BordeTab: TShape;
     PantallaInicial: TTabSheet;
     inicioSesion: TTabSheet;
     Registracion: TTabSheet;
@@ -49,8 +48,7 @@ type
     TextoPuntaje: TLabel;
     Pantallas: TPageControl;
     PantJuego: TTabSheet;
-    PantPrueba: TTabSheet;
-    DatosJug: TStaticText;
+    DatosJug: TLabel;
     procedure BInicioSesionClick(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
     procedure BvolverClick(Sender: TObject);

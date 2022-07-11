@@ -1,18 +1,19 @@
 object Tetris: TTetris
-  Left = 197
-  Height = 692
-  Top = 27
-  Width = 1131
+  Left = 306
+  Height = 814
+  Top = 148
+  Width = 1392
   Caption = 'Tetris'
-  ClientHeight = 692
-  ClientWidth = 1131
+  ClientHeight = 814
+  ClientWidth = 1392
   LCLVersion = '2.0.12.0'
   object Pantallas: TPageControl
-    Left = 8
-    Height = 650
-    Top = 8
-    Width = 1111
+    Left = 3
+    Height = 812
+    Top = 3
+    Width = 1389
     ActivePage = PantJuego
+    ShowTabs = False
     ParentFont = False
     TabIndex = 3
     TabOrder = 0
@@ -214,34 +215,19 @@ object Tetris: TTetris
     end
     object PantJuego: TTabSheet
       Caption = 'PantJuego'
-      ClientHeight = 622
-      ClientWidth = 1103
+      ClientHeight = 804
+      ClientWidth = 1381
       OnShow = PantJuegoShow
       ParentFont = False
-      object DatosJug: TStaticText
-        Left = 176
-        Height = 22
-        Top = 6
-        Width = 838
-        Caption = 'DatosJug'
-        Font.CharSet = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -16
-        Font.Name = 'OCR A Extended'
-        Font.Pitch = fpVariable
-        Font.Quality = fqDraft
-        ParentFont = False
-        TabOrder = 0
-      end
       object TextoPuntaje: TLabel
-        Left = 599
-        Height = 19
-        Top = 112
-        Width = 132
+        Left = 749
+        Height = 24
+        Top = 140
+        Width = 168
         Caption = 'TextoPuntaje'
         Font.CharSet = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -18
+        Font.Color = clWhite
+        Font.Height = -23
         Font.Name = 'OCR A Extended'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -249,14 +235,14 @@ object Tetris: TTetris
         ParentFont = False
       end
       object TxtSiguiente: TLabel
-        Left = 703
-        Height = 17
-        Top = 179
-        Width = 160
+        Left = 879
+        Height = 23
+        Top = 224
+        Width = 192
         Caption = 'Siguiente pieza:'
         Font.CharSet = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -16
+        Font.Color = clWhite
+        Font.Height = -20
         Font.Name = 'OCR A Extended'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
@@ -264,45 +250,50 @@ object Tetris: TTetris
         ParentFont = False
       end
       object ImgSigPieza: TImage
-        Left = 700
-        Height = 160
-        Top = 210
-        Width = 160
+        Left = 875
+        Height = 200
+        Top = 262
+        Width = 200
+        Proportional = True
+      end
+      object ImgODS: TImage
+        Left = 1064
+        Height = 200
+        Top = 512
+        Width = 200
         Proportional = True
       end
       object MensajeODS: TLabel
-        Left = 614
-        Height = 21
-        Top = 416
-        Width = 88
+        Left = 768
+        Height = 28
+        Top = 584
+        Width = 112
         Caption = 'MensajeODS'
+        Constraints.MaxWidth = 300
         Font.CharSet = ANSI_CHARSET
-        Font.Color = clBlack
-        Font.Height = -16
+        Font.Color = clWhite
+        Font.Height = -20
         Font.Name = 'Segoe UI'
         Font.Pitch = fpVariable
         Font.Quality = fqDraft
-        Font.Style = [fsItalic]
         ParentColor = False
         ParentFont = False
+        WordWrap = True
       end
-      object ImgODS: TImage
-        Left = 800
-        Height = 176
-        Top = 410
-        Width = 176
-      end
-      object BordeTab: TShape
-        Left = 188
-        Height = 488
-        Top = 108
-        Width = 368
-        Brush.Color = clGray
-      end
-    end
-    object PantPrueba: TTabSheet
-      Caption = 'PantPrueba'
-      ParentFont = False
+      object DatosJug: TLabel
+        Left = 224
+        Height = 23
+        Top = 16
+        Width = 96
+        Caption = 'DatosJug'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clWhite
+        Font.Height = -20
+        Font.Name = 'OCR A Extended'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
     end
     object Estadisticas: TTabSheet
       Caption = 'Estadisticas'
