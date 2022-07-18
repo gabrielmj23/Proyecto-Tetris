@@ -30,6 +30,7 @@ type
     campo_UsuarioR: TEdit;
     campo_correo: TEdit;
     Campo_claveR: TEdit;
+    ImgInicio: TImage;
     ListaPaises: TCheckListBox;
     Image1: TImage;
     Image2: TImage;
@@ -237,8 +238,6 @@ var
   i, j: Byte;
 begin
   JuegoActivo := True;
-  // Cargar imagen de fondo
-  FondoJuego.Picture.LoadFromFile('img/imgFondo.jpg');
   // PARA PRUEBAS: Inicializar jugador
   with JugActual do
     begin
@@ -288,3 +287,4 @@ end;
 
 
 end.
+
