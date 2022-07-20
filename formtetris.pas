@@ -142,59 +142,50 @@ begin
         GrafTablero[i,j].Parent := Tetris.Pantallas.ActivePage;
         // Cargar imagen según valor en tablero
         ArchivoImg := 'img/bloques/';
-        case Tablero[i,j] of
-          0: ArchivoImg := ArchivoImg + 'vacio.png';
-          1: ArchivoImg := ArchivoImg + 'bloque1.png';
-          2: ArchivoImg := ArchivoImg + 'bloque2.png';
-          3: ArchivoImg := ArchivoImg + 'bloque3.png';
-          4: ArchivoImg := ArchivoImg + 'bloque4.png';
-          5: ArchivoImg := ArchivoImg + 'bloque5.png';
-          6: ArchivoImg := ArchivoImg + 'bloque6.png';
-          7: ArchivoImg := ArchivoImg + 'bloque7.png';
-          8: ArchivoImg := ArchivoImg + 'bloque8.png';
-        end;
+        if Tablero[i,j] = 0 then
+          ArchivoImg := ArchivoImg + 'vacio.png'
+        else
+          ArchivoImg := ArchivoImg + 'bloque' + IntToStr(Tablero[i,j]) + '.png';
         GrafTablero[i,j].Picture.LoadFromFile(ArchivoImg);
       end;
 end;
 
-procedure GenPiezas(VAR IdAct, IdSig: Byte);
+procedure GenPiezas(VAR IdAct, IdSig: Byte; ModoJ: Char);
 var
   ArchSig: String;
 begin
-  if CtRest = 0 then
-    JuegoActivo := False
-  else
+  if ModoJ = 'J' then
     begin
-      CtRest := CtRest - 1;
-      Tetris.NRest.Caption := intToStr(CtRest);
-      if IdAct = 0 then
-        // Generar pieza actual de forma aleatoria
-        IdAct := random(8) + 1
+      // Está en modo por jugadas
+      if CtRest = -1 then
+        JuegoActivo := False
       else
-        // Actualizar pieza actual por la seleccionada anteriormente
-        IdAct := IdSig;
-      IdSig := random(8) + 1;
-
-      // Seleccionar archivos de imagen de la siguiente pieza
-      ArchSig := 'img/piezas/';
-      case IdSig of
-        1: ArchSig := ArchSig + 'pieza1.png';
-        2: ArchSig := ArchSig + 'pieza2.png';
-        3: ArchSig := ArchSig + 'pieza3.png';
-        4: ArchSig := ArchSig + 'pieza4.png';
-        5: ArchSig := ArchSig + 'pieza5.png';
-        6: ArchSig := ArchSig + 'pieza6.png';
-        7: ArchSig := ArchSig + 'pieza7.png';
-        8: ArchSig := ArchSig + 'pieza8.png';
-      end;
-      // Cargar imagen de siguiente pieza
-      Tetris.ImgSigPieza.Picture.LoadFromFile(ArchSig);
-
-      // Cargar datos del ODS de la pieza actual
-      Tetris.ImgODS.Picture.LoadFromFile(ImagenesODS[IdAct]);
-      Tetris.TituloODS.Caption := TitulosODS[IdAct];
-      Tetris.MensajeODS.Caption := MensajesODS[IdAct];
+        begin
+          // Modificar cantidad restante cada vez que se genera
+          CtRest := CtRest - 1;
+          Tetris.NRest.Caption := intToStr(CtRest);
+        end;
     end;
+  if JuegoActivo then
+    if IdAct = 0 then
+      // Generar pieza actual de forma aleatoria
+      IdAct := random(8) + 1
+    else
+      // Sustituir pieza actual por la seleccionada anteriormente
+      IdAct := IdSig;
+    IdSig := random(8) + 1;
+
+    // PENDIENTE: Cargar pieza en tablero
+
+    // Seleccionar archivos de imagen de la siguiente pieza
+    ArchSig := 'img/piezas/pieza' + IntToStr(IdSig) + '.png';
+    // Cargar imagen de siguiente pieza
+    Tetris.ImgSigPieza.Picture.LoadFromFile(ArchSig);
+
+    // Cargar datos del ODS de la pieza actual
+    Tetris.ImgODS.Picture.LoadFromFile(ImagenesODS[IdAct]);
+    Tetris.TituloODS.Caption := TitulosODS[IdAct];
+    Tetris.MensajeODS.Caption := MensajesODS[IdAct];
 end;
 
 function LimpiarFilas(): DWord;
@@ -274,7 +265,7 @@ begin
   randomize;
   IdActPieza := 0;
   IdSigPieza := 0;
-  GenPiezas(IdActPieza, IdSigPieza);
+  GenPiezas(IdActPieza, IdSigPieza, ModoJ);
 end;
 
 procedure TTetris.TimerJuegoTimer(Sender: TObject);
