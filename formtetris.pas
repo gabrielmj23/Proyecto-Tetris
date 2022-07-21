@@ -30,6 +30,9 @@ type
     campo_UsuarioR: TEdit;
     campo_correo: TEdit;
     Campo_claveR: TEdit;
+    FondoSesion: TImage;
+    FondoRegistro: TImage;
+    FondoReportes: TImage;
     ImgInicio: TImage;
     ListaPaises: TCheckListBox;
     Image1: TImage;
