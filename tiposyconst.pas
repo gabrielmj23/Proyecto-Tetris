@@ -8,7 +8,7 @@ interface
               Usuario: String[12];
               Fecha: String[10];
               Hora: String[8];
-              PtsGanados: DWord;
+              PtsGanados: QWord;
             end;
 
     Jugador = Record
@@ -109,8 +109,24 @@ interface
                                     'img/ods/pazyjusticia.png',
                                     'img/ods/alianzas.png');
 
+    // PIEZAS - PARA EL JUEGO PRINCIPAL
+    // La matriz de piezas sigue la estructura: Número de pieza - Fila inicial del bloque - Columna inicial del bloque
+    Piezas: Array[1..8, 1..4, 1..2] of Byte = (
+                                                ( (1, 3), (1, 4), (1, 5), (1, 6) ),
+                                                ( (1, 5), (2, 5), (3, 5), (4, 5) ),
+                                                ( (1, 5), (2, 5), (3, 5), (3, 6) ),
+                                                ( (1, 5), (2, 5), (3, 5), (3, 4) ),
+                                                ( (1, 5), (2, 5), (2, 4), (3, 4) ),
+                                                ( (1, 4), (2, 4), (1, 5), (2, 5) ),
+                                                ( (1, 4), (1, 5), (2, 5), (2, 6) ),
+                                                ( (1, 5), (2, 4), (2, 5), (2, 6) )
+                                              );
+
+    AlturaPiezas: Array[1..8] of Byte = ( 1, 4, 3, 3, 3, 2, 2, 2 );
+
 
 // Privado ---------------------------------------------------------------------
 implementation
 
 end.
+

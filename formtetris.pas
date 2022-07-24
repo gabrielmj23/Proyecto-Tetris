@@ -4,7 +4,7 @@ unit FormTetris;
 interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, CheckLst, Types;
+  ExtCtrls, CheckLst, Types, LCLType;
 
 type
 
@@ -31,9 +31,11 @@ type
     campo_UsuarioR: TEdit;
     campo_correo: TEdit;
     Campo_claveR: TEdit;
+    FondoTab: TImage;
     ImgFondoConf: TImage;
     ImgTiempo: TImage;
     ImgJugadas: TImage;
+    TimerGrav: TTimer;
     TxtError: TLabel;
     ListaODS: TCheckListBox;
     IngCantidad: TEdit;
@@ -85,6 +87,7 @@ type
     procedure BvolverClick(Sender: TObject);
     procedure ConfJuegoShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ImgJugadasClick(Sender: TObject);
     procedure ImgPieza1Click(Sender: TObject);
     procedure ImgPieza2Click(Sender: TObject);
@@ -98,6 +101,7 @@ type
     procedure ListaODSItemClick(Sender: TObject; Index: integer);
     procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantJuegoShow(Sender: TObject);
+    procedure TimerGravTimer(Sender: TObject);
     procedure TimerJuegoTimer(Sender: TObject);
   private
 
@@ -118,7 +122,7 @@ var
   JugActual: Jugador;
   Tablero: Array[1..12, 1..9] of Byte;
   GrafTablero: Array[1..12, 1..9] of TImage;
-  Puntaje: DWord;
+  Puntaje: QWord;
   IdActPieza, IdSigPieza: Byte;
   ModoJ: Char;
   CtRest: Integer;
@@ -126,10 +130,15 @@ var
   PiezasDisp: Array[1..5] of Byte;
   ODSDisp: Array[1..5] of Byte;
   JuegoActivo: Boolean;
+  AltMax: Array[1..9] of Byte;
+  TableroColision: Array[1..13, 1..9] of Byte;
+  MoverFila, MoverCol: SmallInt;
+  PiezaActual: Array[1..4, 1..2] of Byte;
+  PtsPiezaAct: Byte;
 
 procedure TTetris.FormCreate(Sender: TObject);
 begin
-  Pantallas.ActivePageIndex := 0;
+  Pantallas.ActivePageIndex := 3;
 end;
 
 // Procedimiento para susituir imagen de pieza seleccionada en configuración de juego
@@ -507,40 +516,58 @@ begin
     end;
 end;
 
+// Procedimiento que, para cada columna, halla la altura máxima de la pieza que puede ir ahí
+procedure DeterminarAltMax();
+var
+  i, j: Byte;
+  Cambiado: Boolean;
+begin
+  // Inicializar
+  for i := 1 to 9 do
+    AltMax[i] := 13;
+  // Revisar el nivel de cada columna
+  for j := 1 to 9 do
+    begin
+      Cambiado := False;
+      i := 1;
+      while (i <= 12) and (not Cambiado) do
+        begin
+          if TableroColision[i,j] <> 0 then
+            begin
+              AltMax[j] := i;
+              Cambiado := True;
+            end;
+          i := i+1;
+        end;
+    end;
+end;
+
 // Procedimiento que carga imagen de cada celda del tablero de juego
 procedure MostrarCeldas();
-const
-  LeftEsquina = 240;
-  TopEsquina = 140;
 var
   i, j: Byte;
   ArchivoImg: String[23];
 begin
-  for i := 1 to 12 do
-    for j := 1 to 9 do
-      begin
-        // Inicializar imagen, posición y tamaño
-        FreeAndNil(GrafTablero[i,j]);
-        GrafTablero[i,j] := TImage.Create(Tetris.Pantallas.ActivePage);
-        GrafTablero[i,j].Left := LeftEsquina + (j-1)*50;
-        GrafTablero[i,j].Top := TopEsquina + (i-1)*50;
-        GrafTablero[i,j].Height := 50;
-        GrafTablero[i,j].Width := 50;
-        GrafTablero[i,j].Proportional := True;
-        GrafTablero[i,j].Parent := Tetris.Pantallas.ActivePage;
-        // Cargar imagen según valor en tablero
-        ArchivoImg := 'img/bloques/';
-        if Tablero[i,j] = 0 then
-          ArchivoImg := ArchivoImg + 'vacio.png'
-        else
-          ArchivoImg := ArchivoImg + 'bloque' + IntToStr(Tablero[i,j]) + '.png';
-        GrafTablero[i,j].Picture.LoadFromFile(ArchivoImg);
-      end;
+  if Tetris.Pantallas.ActivePageIndex = 4 then
+    for i := 1 to 12 do
+      for j := 1 to 9 do
+        begin
+          // Cargar imagen según valor en tablero
+          if Tablero[i,j] = 0 then
+            GrafTablero[i,j].Visible := False
+          else
+            begin
+              ArchivoImg := 'img/bloques/bloque' + IntToStr(Tablero[i,j]) + '.png';
+              GrafTablero[i,j].Picture.LoadFromFile(ArchivoImg);
+              GrafTablero[i,j].Visible := True;
+            end;
+        end;
 end;
 
 // Procedimiento que genera siguientes 2 piezas y las carga en el juego
 procedure GenPiezas(ModoJ: Char; VAR IdAct, IdSig: Byte);
 var
+  i: Byte;
   ArchSig: String;
 begin
   if ModoJ = 'J' then
@@ -555,30 +582,107 @@ begin
           Tetris.NRest.Caption := intToStr(CtRest);
         end;
     end;
-  if JuegoActivo then
-    if IdAct = 0 then
-      // Generar pieza actual de forma aleatoria
-      IdAct := random(NumPiezas) + 1
-    else
-      // Sustituir pieza actual por la seleccionada anteriormente
-      IdAct := IdSig;
-    IdSig := random(NumPiezas) + 1;
+  // Determinar alturas máximas
+  DeterminarAltMax();
 
-    // PENDIENTE: Cargar pieza en tablero
+  if IdAct = 0 then
+    // Generar pieza actual de forma aleatoria
+    IdAct := random(NumPiezas) + 1
+  else
+    // Sustituir pieza actual por la seleccionada anteriormente
+    IdAct := IdSig;
+  IdSig := random(NumPiezas) + 1;
 
-    // Seleccionar archivos de imagen de la siguiente pieza
-    ArchSig := 'img/piezas/pieza' + IntToStr(PiezasDisp[IdSig]) + '.png';
-    // Cargar imagen de siguiente pieza
-    Tetris.ImgSigPieza.Picture.LoadFromFile(ArchSig);
+  // Almacenar datos de la pieza actual
+  PiezaActual := Piezas[PiezasDisp[IdAct]];
+  PtsPiezaAct := PiezasDisp[IdAct];
 
-    // Cargar datos del ODS de la pieza actual
-    Tetris.ImgODS.Picture.LoadFromFile(ImagenesODS[ODSDisp[IdAct]]);
-    Tetris.TituloODS.Caption := TitulosODS[ODSDisp[IdAct]];
-    Tetris.MensajeODS.Caption := MensajesODS[ODSDisp[IdAct]];
+  // Cargar pieza en tablero
+  for i := 1 to 4 do
+    Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
+  MostrarCeldas();
+
+  // Seleccionar archivos de imagen de la siguiente pieza
+  ArchSig := 'img/piezas/pieza' + IntToStr(PiezasDisp[IdSig]) + '.png';
+
+  // Cargar imagen de siguiente pieza
+  Tetris.ImgSigPieza.Picture.LoadFromFile(ArchSig);
+
+  // Cargar datos del ODS de la siguiente pieza
+  Tetris.ImgODS.Picture.LoadFromFile(ImagenesODS[ODSDisp[IdSig]]);
+  Tetris.TituloODS.Caption := TitulosODS[ODSDisp[IdSig]];
+  Tetris.MensajeODS.Caption := MensajesODS[ODSDisp[IdSig]];
+
+  // Verificar si choca con el límite superior
+  for i := 1 to 4 do
+    if AltMax[PiezaActual[i,2]] < AlturaPiezas[PiezasDisp[IdAct]] then
+      JuegoActivo := False;
+
+  // El juego ha terminado, almacenar datos y pasar a resumen de partida
+  if not JuegoActivo then
+    begin
+      Tetris.Pantallas.ActivePageIndex := 5;
+      Tetris.TimerGrav.Enabled := False;
+      Tetris.TimerJuego.Enabled := False;
+      guardarJuego(JugActual.Usuario, Puntaje);
+    end;
+end;
+
+// Procedimiento que maneja el movimiento de la pieza
+procedure MoverPieza(MoverFila, MoverCol: SmallInt);
+var
+  i: Byte;
+  PosicionVal: Boolean;
+  ArchivoImg: String[23];
+begin
+  // Revisar colisiones para cada bloque de la pieza
+  PosicionVal := True;
+  for i := 1 to 4 do
+    if (PiezaActual[i,2] + MoverCol < 1) or (PiezaActual[i,2] + MoverCol > 9) or (TableroColision[PiezaActual[i,1]+MoverFila, PiezaActual[i,2]+MoverCol] <> 0) then
+      PosicionVal := False;
+
+  if PosicionVal then
+    begin
+      // Eliminar valores anteriores de la pieza del tablero
+      for i := 1 to 4 do
+        begin
+          Tablero[PiezaActual[i,1], PiezaActual[i,2]] := 0;
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Visible := False;
+        end;
+
+      // Mover la pieza y actualizar tablero
+      for i := 1 to 4 do
+        begin
+          PiezaActual[i,1] := PiezaActual[i,1] + MoverFila;
+          PiezaActual[i,2] := PiezaActual[i,2] + MoverCol;
+          Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
+          // Reflejar movimiento en tablero de imágenes
+          ArchivoImg := 'img/bloques/bloque' + IntToStr(PtsPiezaAct) + '.png';
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Picture.LoadFromFile(ArchivoImg);
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Visible := True;
+        end;
+    end;
+end;
+
+// Procedimiento que lee la tecla ingresada para el movimiento de la pieza
+procedure TTetris.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Pantallas.ActivePageIndex = 4 then
+    begin
+      MoverFila := 0;
+      MoverCol := 0;
+      case Key of
+        VK_DOWN: MoverFila := 1;
+        VK_LEFT: MoverCol := -1;
+        VK_RIGHT: MoverCol := 1;
+      end;
+      Key := 0;
+      MoverPieza(MoverFila, MoverCol);
+    end;
 end;
 
 // Función que limpia filas del tablero y devuelve el puntaje ganado de ese movimiento
-function LimpiarFilas(): DWord;
+function LimpiarFilas(): QWord;
 var
   i, j, k, PuntosFil: Byte;
   Completa: Boolean;
@@ -611,6 +715,47 @@ begin
       else
         i := i - 1;
     end;
+  // Actualizar tablero de colisiones
+  for i := 1 to 12 do
+    for j := 1 to 9 do
+      TableroColision[i,j] := Tablero[i,j];
+end;
+
+// Procedimiento que maneja la gravedad de la pieza
+procedure TTetris.TimerGravTimer(Sender: TObject);
+var
+  i: Byte;
+  Colision: Boolean;
+begin
+  // Verificar si la pieza ha chocado
+  Colision := False;
+  for i := 1 to 4 do
+    if TableroColision[PiezaActual[i,1]+1, PiezaActual[i,2]] <> 0 then
+      Colision := True;
+
+  // Mover pieza hacia abajo si no chocó
+  if not Colision then
+    begin
+      // Eliminar valores antiguos del tablero
+      for i := 1 to 4 do
+        Tablero[PiezaActual[i,1], PiezaActual[i,2]] := 0;
+
+      // Movimiento
+      for i := 1 to 4 do
+        begin
+          PiezaActual[i,1] := PiezaActual[i,1] + 1;
+          Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
+        end;
+      MostrarCeldas();
+    end
+  else
+    begin
+      // Actualizar puntaje en caso de que se haya formado una línea
+      Puntaje := Puntaje + LimpiarFilas();
+      TextoPuntaje.Caption := 'Puntaje: ' + IntToStr(Puntaje);
+      // Generar nueva pieza
+      GenPiezas(ModoJ, IdActPieza, IdSigPieza);
+    end;
 end;
 
 procedure TTetris.PantJuegoShow(Sender: TObject);
@@ -618,7 +763,6 @@ var
   Formato: String;
   i, j: Byte;
 begin
-  JuegoActivo := True;
   // PARA PRUEBAS: Inicializar jugador
   with JugActual do
     begin
@@ -639,27 +783,56 @@ begin
            TxtRestante.Caption := 'Jugadas restantes:';
          end;
   end;
+  // Inicializar tablero de colisiones
+  for i := 1 to 13 do
+    for j := 1 to 9 do
+      if i < 13 then
+        TableroColision[i,j] := 0
+      else
+        TableroColision[i,j] := 1;
   // Limpiar tablero de Tetris y mostrar
   for i := 1 to 12 do
     for j := 1 to 9 do
       Tablero[i,j] := 0;
-  MostrarCeldas();
+  for i := 1 to 12 do
+    for j := 1 to 9 do
+      begin
+        // Inicializar cada imagen, posición y tamaño
+        FreeAndNil(GrafTablero[i,j]);
+        GrafTablero[i,j] := TImage.Create(Tetris.Pantallas.ActivePage);
+        GrafTablero[i,j].Left := 240 + (j-1)*50;
+        GrafTablero[i,j].Top := 140 + (i-1)*50;
+        GrafTablero[i,j].Height := 50;
+        GrafTablero[i,j].Width := 50;
+        GrafTablero[i,j].Proportional := True;
+        GrafTablero[i,j].Parent := Tetris.Pantallas.ActivePage;
+        GrafTablero[i,j].Visible := False;
+      end;
   //Inicializar puntaje
   Puntaje := 0;
   TextoPuntaje.Caption := 'Puntaje: ' + IntToStr(Puntaje);
-  // PRUEBAS: Generar primera pieza y siguiente pieza
+  // Generar primera pieza y siguiente pieza
+  JuegoActivo := True;
   randomize;
   IdActPieza := 0;
   IdSigPieza := 0;
   GenPiezas(ModoJ, IdActPieza, IdSigPieza);
+  TimerGrav.Enabled := True;
 end;
 
 procedure TTetris.TimerJuegoTimer(Sender: TObject);
 begin
   NRest.Caption := intToStr(CtRest);
   CtRest := CtRest - 1;
-  if CtRest = -1 then
-    TimerJuego.Enabled := False;
+  // El juego ha terminado, guardar información y pasar a resumen de partida
+  if (ModoJ = 'T') and (CtRest = -1) then
+    begin
+      TimerJuego.Enabled := False;
+      JuegoActivo := False;
+      TimerGrav.Enabled := False;
+      Pantallas.ActivePageIndex := 5;
+      guardarJuego(JugActual.Usuario, Puntaje);
+    end;
 end;
 
 

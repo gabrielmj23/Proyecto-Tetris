@@ -4,7 +4,7 @@ unit guardarJuegos;
 interface
   function generarCodigoJuego(): DWord;
 
-  procedure guardarJuego(Participante: String; PtsJuego: DWord);
+  procedure guardarJuego(Participante: String; PtsJuego: QWord);
 
 // Privado ---------------------------------------------------------------------
 implementation
@@ -15,10 +15,7 @@ implementation
     JuegoAct: Juego;
 
   function generarCodigoJuego(): DWord;
-  var
-    HayGuardados: Boolean;
   begin
-    HayGuardados := True;
     // Abrir archivo
     assignFile(Juegos, 'Juegos.dat');
     if FileExists('Juegos.dat') then
@@ -26,23 +23,20 @@ implementation
     else
       begin
         rewrite(Juegos);
-        HayGuardados := False;
       end;
 
     // Generar código según el último guardado
-    if HayGuardados then
+    generarCodigoJuego := 1;
+    while not eof(Juegos) do
       begin
-        seek(Juegos, filesize(Juegos)-1);
         read(Juegos, JuegoAct);
         generarCodigoJuego := JuegoAct.Codigo + 1;
-      end
-    else
-      generarCodigoJuego := 1;
+      end;
 
     closeFile(Juegos);
   end;
 
-  procedure guardarJuego(Participante: String; PtsJuego: DWord);
+  procedure guardarJuego(Participante: String; PtsJuego: QWord);
   var
     CodJuego: DWord;
     FechaAct: String[10];
