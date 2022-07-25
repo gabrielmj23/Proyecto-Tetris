@@ -4,7 +4,7 @@ unit FormTetris;
 interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, CheckLst, Types, LCLType;
+  ExtCtrls, CheckLst, LCLType;
 
 type
 
@@ -36,6 +36,7 @@ type
     Campo_claveR: TEdit;
     FondoTab: TImage;
     FondoResumen: TImage;
+    ImgSonido: TImage;
     ImgFondoConf: TImage;
     ImgTiempo: TImage;
     ImgJugadas: TImage;
@@ -107,9 +108,11 @@ type
     procedure ImgPieza6Click(Sender: TObject);
     procedure ImgPieza7Click(Sender: TObject);
     procedure ImgPieza8Click(Sender: TObject);
+    procedure ImgSonidoClick(Sender: TObject);
     procedure ImgTiempoClick(Sender: TObject);
     procedure ListaODSItemClick(Sender: TObject; Index: integer);
     procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
+    procedure PantallasChange(Sender: TObject);
     procedure PantJuegoShow(Sender: TObject);
     procedure ResumenJuegoShow(Sender: TObject);
     procedure TimerGravTimer(Sender: TObject);
@@ -127,9 +130,10 @@ implementation
 {$R *.lfm}
 
 uses
-  tiposYConst, guardarJuegos, reportes;
+  tiposYConst, guardarJuegos, reportes, MMSystem;
 
 var
+  EstadoMusica: Boolean;
   JugActual: Jugador;
   Tablero: Array[1..12, 1..9] of Byte;
   GrafTablero: Array[1..12, 1..9] of TImage;
@@ -149,7 +153,30 @@ var
 
 procedure TTetris.FormCreate(Sender: TObject);
 begin
-  Pantallas.ActivePageIndex := 3;
+  Pantallas.ActivePageIndex := 0;
+  sndPlaySound('musica/MusicaTetris.wav', snd_async or snd_loop);
+  EstadoMusica := True;
+end;
+
+// Procedimiento para encender/apagar sonido
+procedure TTetris.ImgSonidoClick(Sender: TObject);
+begin
+  if EstadoMusica then
+    begin
+      sndPlaySound(nil, snd_async or snd_loop);
+      ImgSonido.Picture.LoadFromFile('img/variados/sonidoOff.png');
+    end
+  else
+    begin
+      sndPlaySound('musica/MusicaTetris.wav', snd_async or snd_loop);
+      ImgSonido.Picture.LoadFromFile('img/variados/sonido.png');
+    end;
+  EstadoMusica := not EstadoMusica
+end;
+
+procedure TTetris.PantallasChange(Sender: TObject);
+begin
+  ImgSonido.Parent := Pantallas.ActivePage;
 end;
 
 // Procedimiento para susituir imagen de pieza seleccionada en configuración de juego

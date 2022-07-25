@@ -4,7 +4,7 @@ unit reportes;
 interface
   uses tiposYConst;
 
-  function puntosJugador(Usuario: String): DWord;
+  function puntosJugador(Usuario: String): QWord;
 
   function reporteGlobal(Directorio: String): RepGeneral;
 
@@ -20,7 +20,7 @@ interface
 implementation
   uses sysutils;
 
-  function puntosJugador(Usuario: String): DWord;
+  function puntosJugador(Usuario: String): QWord;
   var
     Juegos: File of Juego;
     JuegoAct: Juego;
@@ -495,3 +495,4 @@ implementation
   end;
 
 end.
+
