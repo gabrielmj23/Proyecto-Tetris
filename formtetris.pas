@@ -10,27 +10,38 @@ type
 
   { TTetris }
   TTetris = class(TForm)
-    BRegistrar: TButton;
-    BInicioSesion: TButton;
-    BRegistrarse: TButton;
-    BEstadisticas: TButton;
-    BReportePais: TButton;
-    BReporteJug: TButton;
-    BTop5Global: TButton;
-    BTop5Pais: TButton;
-    BSalir: TButton;
-    BReporteGlobal: TButton;
-    Bvolver: TButton;
-    BConfirmar: TButton;
-    Bvolver1: TButton;
-    Bvolver2: TButton;
+    BConfirmar: TImage;
+    BEstadisticas: TImage;
+    BInicioSesion: TImage;
+    BRegistrar: TImage;
+    BRegistrarse: TImage;
+    BReporteGlobal: TImage;
+    BReporteJug: TImage;
+    BReportePais: TImage;
+    BSalir: TImage;
+    BTop5Global: TImage;
+    BTop5Pais: TImage;
+    Bvolver: TImage;
+    Bvolver1: TImage;
+    Bvolver2: TImage;
     campo_usuario: TEdit;
     Campo_clave: TEdit;
     Campo_NombreC: TEdit;
     campo_UsuarioR: TEdit;
     campo_correo: TEdit;
     Campo_claveR: TEdit;
+    Image10: TImage;
+    Image11: TImage;
+    Image12: TImage;
+    Image13: TImage;
+    Image6: TImage;
+    Image7: TImage;
+    Image8: TImage;
+    Image9: TImage;
     ImgInicio: TImage;
+    ImgInicio1: TImage;
+    ImgInicio2: TImage;
+    ImgInicio3: TImage;
     ListaPaises: TCheckListBox;
     Image1: TImage;
     Image2: TImage;
@@ -56,11 +67,40 @@ type
     Estadisticas: TTabSheet;
     PantJuego: TTabSheet;
     DatosJug: TLabel;
+    procedure BConfirmarMouseEnter(Sender: TObject);
+    procedure BConfirmarMouseLeave(Sender: TObject);
     procedure BEstadisticasClick(Sender: TObject);
+    procedure BEstadisticasMouseEnter(Sender: TObject);
+    procedure BEstadisticasMouseLeave(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
+    procedure BInicioSesionMouseEnter(Sender: TObject);
+    procedure BInicioSesionMouseLeave(Sender: TObject);
+    procedure BRegistrarMouseEnter(Sender: TObject);
+    procedure BRegistrarMouseLeave(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
+    procedure BRegistrarseMouseEnter(Sender: TObject);
+    procedure BRegistrarseMouseLeave(Sender: TObject);
+    procedure BReporteGlobalMouseEnter(Sender: TObject);
+    procedure BReporteGlobalMouseLeave(Sender: TObject);
+    procedure BReporteJugMouseEnter(Sender: TObject);
+    procedure BReporteJugMouseLeave(Sender: TObject);
+    procedure BReportePaisMouseEnter(Sender: TObject);
+    procedure BReportePaisMouseLeave(Sender: TObject);
+    procedure BSalirMouseEnter(Sender: TObject);
+    procedure BSalirMouseLeave(Sender: TObject);
+    procedure BTop5GlobalMouseEnter(Sender: TObject);
+    procedure BTop5GlobalMouseLeave(Sender: TObject);
+    procedure BTop5PaisMouseEnter(Sender: TObject);
+    procedure BTop5PaisMouseLeave(Sender: TObject);
+    procedure Bvolver1MouseEnter(Sender: TObject);
+    procedure Bvolver1MouseLeave(Sender: TObject);
+    procedure Bvolver2MouseEnter(Sender: TObject);
+    procedure Bvolver2MouseLeave(Sender: TObject);
     procedure BvolverClick(Sender: TObject);
+    procedure BvolverMouseEnter(Sender: TObject);
+    procedure BvolverMouseLeave(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
     procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantJuegoShow(Sender: TObject);
     procedure TimerJuegoTimer(Sender: TObject);
@@ -94,9 +134,34 @@ begin
   Pantallas.ActivePageIndex := 0;
 end;
 
+procedure TTetris.Image1Click(Sender: TObject);
+begin
+
+end;
+
 procedure TTetris.BInicioSesionClick(Sender: TObject);
 begin
  inicioSesion.show;
+end;
+
+procedure TTetris.BInicioSesionMouseEnter(Sender: TObject);
+begin
+  BInicioSesion.picture.loadfromfile('img/botones/BinicioS2.png');
+end;
+
+procedure TTetris.BInicioSesionMouseLeave(Sender: TObject);
+begin
+  BInicioSesion.picture.loadfromfile('img/botones/BinicioS1.png');
+end;
+
+procedure TTetris.BRegistrarMouseEnter(Sender: TObject);
+begin
+  BRegistrar.picture.loadfromfile('img/botones/Bregistrarse2.png');
+end;
+
+procedure TTetris.BRegistrarMouseLeave(Sender: TObject);
+begin
+  BRegistrar.picture.loadfromfile('img/botones/Bregistrarse1.png');
 end;
 
 procedure TTetris.BEstadisticasClick(Sender: TObject);
@@ -104,14 +169,134 @@ begin
   estadisticas.show;
 end;
 
+procedure TTetris.BConfirmarMouseEnter(Sender: TObject);
+begin
+  BConfirmar.picture.loadfromfile('img/botones/BinicioS2.png');
+end;
+
+procedure TTetris.BConfirmarMouseLeave(Sender: TObject);
+begin
+  BConfirmar.picture.loadfromfile('img/botones/BinicioS1.png');
+end;
+
+procedure TTetris.BEstadisticasMouseEnter(Sender: TObject);
+begin
+  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas2.png');
+end;
+
+procedure TTetris.BEstadisticasMouseLeave(Sender: TObject);
+begin
+  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas1.png');
+end;
+
 procedure TTetris.BRegistrarseClick(Sender: TObject);
 begin
   registracion.show;
 end;
 
+procedure TTetris.BRegistrarseMouseEnter(Sender: TObject);
+begin
+   BRegistrarse.picture.loadfromfile('img/botones/Bregistrarse2.png');
+end;
+
+procedure TTetris.BRegistrarseMouseLeave(Sender: TObject);
+begin
+  BRegistrarse.picture.loadfromfile('img/botones/Bregistrarse1.png');
+end;
+
+procedure TTetris.BReporteGlobalMouseEnter(Sender: TObject);
+begin
+  BReporteGlobal.picture.loadfromfile('img/botones/BreporteG2.png');
+end;
+
+procedure TTetris.BReporteGlobalMouseLeave(Sender: TObject);
+begin
+  BReporteGlobal.picture.loadfromfile('img/botones/BreporteG1.png');
+end;
+
+procedure TTetris.BReporteJugMouseEnter(Sender: TObject);
+begin
+  BReporteJug.picture.loadfromfile('img/botones/BreporteJ2.png');
+end;
+
+procedure TTetris.BReporteJugMouseLeave(Sender: TObject);
+begin
+  BReporteJug.picture.loadfromfile('img/botones/BreporteJ1.png');
+end;
+
+procedure TTetris.BReportePaisMouseEnter(Sender: TObject);
+begin
+  BReportePais.picture.loadfromfile('img/botones/BreporteP2.png');
+end;
+
+procedure TTetris.BReportePaisMouseLeave(Sender: TObject);
+begin
+  BReportePais.picture.loadfromfile('img/botones/BreporteP1.png');
+end;
+
+procedure TTetris.BSalirMouseEnter(Sender: TObject);
+begin
+   BSalir.picture.loadfromfile('img/botones/BSalir2.png');
+end;
+
+procedure TTetris.BSalirMouseLeave(Sender: TObject);
+begin
+  BSalir.picture.loadfromfile('img/botones/BSalir1.png');
+end;
+
+procedure TTetris.BTop5GlobalMouseEnter(Sender: TObject);
+begin
+  BTop5Global.picture.loadfromfile('img/botones/BTop5G2.png');
+end;
+
+procedure TTetris.BTop5GlobalMouseLeave(Sender: TObject);
+begin
+  BTop5Global.picture.loadfromfile('img/botones/BTop5G1.png');
+end;
+
+procedure TTetris.BTop5PaisMouseEnter(Sender: TObject);
+begin
+  BTop5Pais.picture.loadfromfile('img/botones/BTop5P2.png');
+end;
+
+procedure TTetris.BTop5PaisMouseLeave(Sender: TObject);
+begin
+  BTop5Pais.picture.loadfromfile('img/botones/BTop5P1.png')
+end;
+
+procedure TTetris.Bvolver1MouseEnter(Sender: TObject);
+begin
+  Bvolver1.picture.loadfromfile('img/botones/Bvolver2.png');
+end;
+
+procedure TTetris.Bvolver1MouseLeave(Sender: TObject);
+begin
+  Bvolver1.picture.loadfromfile('img/botones/Bvolver1.png');
+end;
+
+procedure TTetris.Bvolver2MouseEnter(Sender: TObject);
+begin
+  Bvolver2.picture.loadfromfile('img/botones/Bvolver2.png');
+end;
+
+procedure TTetris.Bvolver2MouseLeave(Sender: TObject);
+begin
+  Bvolver2.picture.loadfromfile('img/botones/Bvolver1.png');
+end;
+
 procedure TTetris.BvolverClick(Sender: TObject);
 begin
- PantallaInicial.show;
+  PantallaInicial.show;
+end;
+
+procedure TTetris.BvolverMouseEnter(Sender: TObject);
+begin
+  Bvolver.picture.loadfromfile('img/botones/Bvolver2.png');
+end;
+
+procedure TTetris.BvolverMouseLeave(Sender: TObject);
+begin
+  Bvolver.picture.loadfromfile('img/botones/Bvolver1.png');
 end;
 
 procedure TTetris.ListaPaisesItemClick(Sender: TObject; Index: integer);
