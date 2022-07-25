@@ -177,9 +177,10 @@ end;
 procedure TTetris.PantallasChange(Sender: TObject);
 begin
   ImgSonido.Parent := Pantallas.ActivePage;
+  ImgSonido.BringToFront;
 end;
 
-// Procedimiento para susituir imagen de pieza seleccionada en configuración de juego
+// Procedimiento para sustituir imagen de pieza seleccionada en configuración de juego
 procedure EliminarSelPieza();
 begin
   case PiezasDisp[IdSelPieza] of
@@ -194,18 +195,30 @@ begin
   end;
 end;
 
-procedure TTetris.ImgPieza1Click(Sender: TObject);
+// Procedimiento que maneja la selección de una pieza en configuración de juego
+procedure ManejarSelPieza(Pieza: TImage; NPieza: Byte);
 var
-  i: Byte;
+  i, IdArr: Byte;
   YaEsta: Boolean;
 begin
   // Verificar que no esté ya seleccionada la pieza
   YaEsta := False;
   for i := 1 to 5 do
-    if PiezasDisp[i] = 1 then
-      YaEsta := True;
-
-  if not YaEsta then
+    if PiezasDisp[i] = NPieza then
+      begin
+        YaEsta := True;
+        IdArr := i;
+      end;
+  if YaEsta then
+    begin
+      // Eliminar selección moviendo todos los elementos del arreglo de selección a la izquierda
+      for i := IdArr to 4 do
+        PiezasDisp[i] := PiezasDisp[i+1];
+      PiezasDisp[5] := 0;
+      IdSelPieza := IdSelPieza - 1;
+      Pieza.Picture.LoadFromFile('img/piezas/pieza' + IntToStr(NPieza) + '.png');
+    end
+  else
     begin
       // Si ya hay 5 seleccionadas, reiniciar índice de selección
       if IdSelPieza = 6 then
@@ -213,185 +226,50 @@ begin
       if PiezasDisp[IdSelPieza] <> 0 then
         EliminarSelPieza();
       // Indicar que se seleccionó y guardar
-      ImgPieza1.Picture.LoadFromFile('img/piezas/piezaSel1.png');
-      PiezasDisp[IdSelPieza] := 1;
+      Pieza.Picture.LoadFromFile('img/piezas/piezaSel' + IntToStr(NPieza) + '.png');
+      PiezasDisp[IdSelPieza] := NPieza;
       IdSelPieza := IdSelPieza + 1;
     end;
+end;
+
+procedure TTetris.ImgPieza1Click(Sender: TObject);
+begin
+  ManejarSelPieza(ImgPieza1, 1);
 end;
 
 procedure TTetris.ImgPieza2Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 2 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza2.Picture.LoadFromFile('img/piezas/piezaSel2.png');
-      PiezasDisp[IdSelPieza] := 2;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza2, 2);
 end;
 
 procedure TTetris.ImgPieza3Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 3 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza3.Picture.LoadFromFile('img/piezas/piezaSel3.png');
-      PiezasDisp[IdSelPieza] := 3;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza3, 3);
 end;
 
 procedure TTetris.ImgPieza4Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 4 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de pieza
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza4.Picture.LoadFromFile('img/piezas/piezaSel4.png');
-      PiezasDisp[IdSelPieza] := 4;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza4, 4);
 end;
 
 procedure TTetris.ImgPieza5Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 5 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza5.Picture.LoadFromFile('img/piezas/piezaSel5.png');
-      PiezasDisp[IdSelPieza] := 5;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza5, 5);
 end;
 
 procedure TTetris.ImgPieza6Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 6 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza6.Picture.LoadFromFile('img/piezas/piezaSel6.png');
-      PiezasDisp[IdSelPieza] := 6;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza6, 6);
 end;
 
 procedure TTetris.ImgPieza7Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 7 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza7.Picture.LoadFromFile('img/piezas/piezaSel7.png');
-      PiezasDisp[IdSelPieza] := 7;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza7, 7);
 end;
 
 procedure TTetris.ImgPieza8Click(Sender: TObject);
-var
-  i: Byte;
-  YaEsta: Boolean;
 begin
-  // Verificar que no esté ya seleccionada la pieza
-  YaEsta := False;
-  for i := 1 to 5 do
-    if PiezasDisp[i] = 8 then
-      YaEsta := True;
-
-  if not YaEsta then
-    begin
-      // Si ya hay 5 seleccionadas, reiniciar índice de selección
-      if IdSelPieza = 6 then
-        IdSelPieza := 1;
-      if PiezasDisp[IdSelPieza] <> 0 then
-        EliminarSelPieza();
-      // Indicar que se seleccionó y guardar
-      ImgPieza8.Picture.LoadFromFile('img/piezas/piezaSel8.png');
-      PiezasDisp[IdSelPieza] := 8;
-      IdSelPieza := IdSelPieza + 1;
-    end;
+  ManejarSelPieza(ImgPieza8, 8);
 end;
 
 procedure TTetris.ImgTiempoClick(Sender: TObject);
@@ -414,28 +292,45 @@ end;
 
 procedure TTetris.ListaODSItemClick(Sender: TObject; Index: integer);
 var
-  i, Seleccionados, IdAntiguo: Byte;
+  i, Seleccionados, IdAntiguo, IdArr: Byte;
 begin
-  // Determinar cuántos se han seleccionado
-  Seleccionados := 0;
-  for i := 0 to ListaODS.Items.Count-1 do
-    if ListaODS.Checked[i] then
-      Seleccionados := Seleccionados + 1;
-  if Seleccionados <= 5 then
+  // Manejar cuando se elimina una selección
+  if ListaODS.Checked[Index] = False then
     begin
-      // Guardar ODS seleccionado
-      ODSDisp[IdSelODS] := Index+1;
+      // Determinar índice en arreglo de selecciones
+      for i := 1 to 5 do
+        if ODSDisp[i] = Index+1 then
+          IdArr := i;
+      // Eliminar selección moviendo a la izquierda cada elemento
+      for i := IdArr to 4 do
+        ODSDisp[i] := ODSDisp[i+1];
+      ODSDisp[5] := 0;
+      IdSelODS := IdSelODS - 1;
     end
   else
+    // Manejar cuando se agrega un ODS
     begin
-      // Sustituir ODS más antiguo
-      if IdSelODS = 6 then
-        IdSelODS := 1;
-      IdAntiguo := ODSDisp[IdSelODS]-1;
-      ListaODS.Checked[IdAntiguo] := False;
-      ODSDisp[IdSelODS] := Index+1;
+      // Determinar cuántos se han seleccionado
+      Seleccionados := 0;
+      for i := 0 to ListaODS.Items.Count-1 do
+        if ListaODS.Checked[i] then
+          Seleccionados := Seleccionados + 1;
+      if Seleccionados <= 5 then
+        begin
+          // Guardar ODS seleccionado
+          ODSDisp[IdSelODS] := Index+1;
+        end
+      else
+        begin
+          // Sustituir ODS más antiguo
+          if IdSelODS = 6 then
+            IdSelODS := 1;
+          IdAntiguo := ODSDisp[IdSelODS]-1;
+          ListaODS.Checked[IdAntiguo] := False;
+          ODSDisp[IdSelODS] := Index+1;
+        end;
+      IdSelODS := IdSelODS + 1;
     end;
-  IdSelODS := IdSelODS + 1;
 end;
 
 procedure TTetris.BInicioSesionClick(Sender: TObject);
@@ -486,6 +381,7 @@ var
   MsjError: String;
 begin
   // Validar configuraciones
+  MsjError := '';
   validarConfig(MsjError, NumPiezas, NumODS);
   if MsjError <> '' then
     begin
@@ -498,6 +394,7 @@ begin
       // Ocultar error si está visible y llevar a juego principal
       TxtError.Visible := False;
       Pantallas.ActivePageIndex := 4;
+      Pantallas.OnChange(Pantallas);
     end;
 end;
 
@@ -660,6 +557,7 @@ begin
   if not JuegoActivo then
     begin
       Tetris.Pantallas.ActivePageIndex := 5;
+      Tetris.Pantallas.OnChange(Tetris.Pantallas);
       Tetris.TimerGrav.Enabled := False;
       Tetris.TimerJuego.Enabled := False;
       guardarJuego(JugActual.Usuario, Puntaje);
@@ -871,6 +769,7 @@ begin
       JuegoActivo := False;
       TimerGrav.Enabled := False;
       Pantallas.ActivePageIndex := 5;
+      Pantallas.OnChange(Pantallas);
       guardarJuego(JugActual.Usuario, Puntaje);
     end;
 end;
