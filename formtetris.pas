@@ -21,6 +21,9 @@ type
     BSalir: TButton;
     BReporteGlobal: TButton;
     BotonJugar: TButton;
+    BJugarOtra: TButton;
+    BEstad: TButton;
+    BFinal: TButton;
     Bvolver: TButton;
     BConfirmar: TButton;
     Bvolver1: TButton;
@@ -32,9 +35,13 @@ type
     campo_correo: TEdit;
     Campo_claveR: TEdit;
     FondoTab: TImage;
+    FondoResumen: TImage;
     ImgFondoConf: TImage;
     ImgTiempo: TImage;
     ImgJugadas: TImage;
+    JuegoConcluido: TLabel;
+    TxtPuntajeRes: TLabel;
+    ResumenJuego: TTabSheet;
     TimerGrav: TTimer;
     TxtError: TLabel;
     ListaODS: TCheckListBox;
@@ -81,7 +88,10 @@ type
     Estadisticas: TTabSheet;
     PantJuego: TTabSheet;
     DatosJug: TLabel;
+    procedure BEstadClick(Sender: TObject);
+    procedure BFinalClick(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
+    procedure BJugarOtraClick(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
     procedure BvolverClick(Sender: TObject);
@@ -101,6 +111,7 @@ type
     procedure ListaODSItemClick(Sender: TObject; Index: integer);
     procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantJuegoShow(Sender: TObject);
+    procedure ResumenJuegoShow(Sender: TObject);
     procedure TimerGravTimer(Sender: TObject);
     procedure TimerJuegoTimer(Sender: TObject);
   private
@@ -758,6 +769,7 @@ begin
     end;
 end;
 
+// Procedimiento para iniciar el juego
 procedure TTetris.PantJuegoShow(Sender: TObject);
 var
   Formato: String;
@@ -820,6 +832,7 @@ begin
   TimerGrav.Enabled := True;
 end;
 
+// Procedimiento que controla el modo por tiempo
 procedure TTetris.TimerJuegoTimer(Sender: TObject);
 begin
   NRest.Caption := intToStr(CtRest);
@@ -834,6 +847,27 @@ begin
       guardarJuego(JugActual.Usuario, Puntaje);
     end;
 end;
+
+procedure TTetris.ResumenJuegoShow(Sender: TObject);
+begin
+  TxtPuntajeRes.Caption := 'Puntaje obtenido: ' + IntToStr(Puntaje);
+end;
+
+procedure TTetris.BJugarOtraClick(Sender: TObject);
+begin
+  Pantallas.ActivePageIndex := 3;
+end;
+
+procedure TTetris.BEstadClick(Sender: TObject);
+begin
+  Pantallas.ActivePageIndex := 6;
+end;
+
+procedure TTetris.BFinalClick(Sender: TObject);
+begin
+  Tetris.Close;
+end;
+
 
 
 end.
