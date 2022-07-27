@@ -4,7 +4,7 @@ unit FormTetris;
 interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, CheckLst, LCLType;
+  ExtCtrls, CheckLst, Types, LCLType, EditBtn, TAGraph;
 
 type
 
@@ -24,6 +24,7 @@ type
     BJugarOtra: TButton;
     BEstad: TButton;
     BFinal: TButton;
+    BGenReporte: TButton;
     Bvolver: TButton;
     BConfirmar: TButton;
     Bvolver1: TButton;
@@ -34,6 +35,14 @@ type
     campo_UsuarioR: TEdit;
     campo_correo: TEdit;
     Campo_claveR: TEdit;
+    CeroTxt: TLabel;
+    CajaPaises: TComboBox;
+    FondoRepG: TImage;
+    SelPaisR: TLabel;
+    PMax: TLabel;
+    MsjSalida: TLabel;
+    DiagramaG: TScrollBox;
+    SelDirectorio: TDirectoryEdit;
     FondoTab: TImage;
     FondoResumen: TImage;
     ImgSonido: TImage;
@@ -41,6 +50,9 @@ type
     ImgTiempo: TImage;
     ImgJugadas: TImage;
     JuegoConcluido: TLabel;
+    MsjDirectorio: TLabel;
+    PRepGeneral: TTabSheet;
+    TxtErrorRep: TLabel;
     TxtPuntajeRes: TLabel;
     ResumenJuego: TTabSheet;
     TimerGrav: TTimer;
@@ -91,6 +103,7 @@ type
     DatosJug: TLabel;
     procedure BEstadClick(Sender: TObject);
     procedure BFinalClick(Sender: TObject);
+    procedure BGenReporteClick(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
     procedure BJugarOtraClick(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
@@ -114,6 +127,7 @@ type
     procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantallasChange(Sender: TObject);
     procedure PantJuegoShow(Sender: TObject);
+    procedure PRepGeneralShow(Sender: TObject);
     procedure ResumenJuegoShow(Sender: TObject);
     procedure TimerGravTimer(Sender: TObject);
     procedure TimerJuegoTimer(Sender: TObject);
@@ -133,23 +147,28 @@ uses
   tiposYConst, guardarJuegos, reportes, MMSystem;
 
 var
+  // Uso General
   EstadoMusica: Boolean;
   JugActual: Jugador;
+  // Juego principal
   Tablero: Array[1..12, 1..9] of Byte;
   GrafTablero: Array[1..12, 1..9] of TImage;
   Puntaje: QWord;
   IdActPieza, IdSigPieza: Byte;
   ModoJ: Char;
   CtRest: Integer;
-  IdSelPieza, IdSelODS, NumPiezas, NumODS: Byte;
-  PiezasDisp: Array[1..5] of Byte;
-  ODSDisp: Array[1..5] of Byte;
   JuegoActivo: Boolean;
   AltMax: Array[1..9] of Byte;
   TableroColision: Array[1..13, 1..9] of Byte;
   MoverFila, MoverCol: SmallInt;
   PiezaActual: Array[1..4, 1..2] of Byte;
   PtsPiezaAct: Byte;
+  // Configuración de juego
+  IdSelPieza, IdSelODS, NumPiezas, NumODS: Byte;
+  PiezasDisp: Array[1..5] of Byte;
+  ODSDisp: Array[1..5] of Byte;
+  // Reportes
+  ModoReporte: Byte;
 
 procedure TTetris.FormCreate(Sender: TObject);
 begin
@@ -792,6 +811,117 @@ end;
 procedure TTetris.BFinalClick(Sender: TObject);
 begin
   Tetris.Close;
+end;
+
+procedure TTetris.PRepGeneralShow(Sender: TObject);
+begin
+  TxtErrorRep.Visible := False;
+  MsjSalida.Visible := False;
+  DiagramaG.Visible := False;
+  CeroTxt.Visible := False;
+  PMax.Visible := False;
+  if ModoReporte = 1 then
+    begin
+      // Configurar pantalla para reporte global
+      SelPaisR.Visible := False;
+      CajaPaises.Visible := False;
+      BGenReporte.Top := 96;
+      TxtErrorRep.Top := 104;
+      MsjSalida.Top := 148;
+      DiagramaG.Top := 224;
+      DiagramaG.Height := 500;
+      CeroTxt.Top := 200;
+      PMax.Top := 200;
+    end
+  else
+    begin
+      // Configurar pantalla para reporte de país
+      SelPaisR.Visible := True;
+      CajaPaises.Visible := True;
+      BGenReporte.Top := 152;
+      TxtErrorRep.Top := 152;
+      MsjSalida.Top := 208;
+      DiagramaG.Top := 272;
+      DiagramaG.Height := 464;
+      CeroTxt.Top := 240;
+      PMax.Top := 240;
+    end;
+end;
+
+// Manejar petición para reporte global o de país
+procedure TTetris.BGenReporteClick(Sender: TObject);
+const
+  LeftLab = 24;
+  TopLab = 40;
+  LeftFig = 200;
+  TopFig = 32;
+  MaxW = 823;
+var
+  RGeneral: RepGeneral;
+  PtsMax: QWord;
+  NJugadores, i: DWord;
+  LabelNom: TLabel;
+  RectJug: TShape;
+begin
+  if (SelDirectorio.Directory = '(Sin seleccionar)') or (SelDirectorio.Directory = '') then
+    begin
+      MsjSalida.Visible := False;
+      CeroTxt.Visible := False;
+      PMax.Visible := False;
+      DiagramaG.Visible := False;
+      TxtErrorRep.Caption := 'Debe seleccionar una carpeta';
+      TxtErrorRep.Visible := True;
+    end
+  else
+    begin
+      TxtErrorRep.Visible := False;
+      if ModoReporte = 1 then
+        RGeneral := reporteGlobal(SelDirectorio.Directory)
+      else
+        RGeneral := reportePais(SelDirectorio.Directory, CajaPaises.Text);
+      if length(RGeneral.LJugadores) = 0 then
+        begin
+          // No hay jugadores disponibles
+          MsjSalida.Caption := 'No hay jugadores disponibles';
+          MsjSalida.Visible := True;
+        end
+      else
+        begin
+          MsjSalida.Visible := True;
+          MsjSalida.Caption := 'Se generó el reporte como ' + RGeneral.NArchivo;
+          // Determinar mayor puntaje
+          NJugadores := length(RGeneral.LJugadores);
+          PtsMax := 0;
+          for i := 1 to NJugadores do
+            if RGeneral.LPuntajes[i] > PtsMax then
+              PtsMax := RGeneral.LPuntajes[i];
+          CeroTxt.Visible := True;
+          PMax.Caption := IntToStr(PtsMax);
+          PMax.Visible := True;
+          // Generar uno a uno los elementos del diagrama
+          for i := 1 to NJugadores do
+            begin
+              // Crear label con usuario
+              LabelNom := TLabel.Create(Self);
+              LabelNom.Parent := DiagramaG;
+              LabelNom.Left := LeftLab;
+              LabelNom.Top := TopLab * i + 30 * (i-1);
+              LabelNom.Font.Size := 11;
+              LabelNom.Font.Name := 'OCR A Extended';
+              LabelNom.Caption := RGeneral.LJugadores[i].Usuario;
+              // Crear barra que indique el puntaje
+              RectJug := TShape.Create(Self);
+              RectJug.Parent := DiagramaG;
+              RectJug.Brush.Color := clLime;
+              RectJug.Shape := stRectangle;
+              RectJug.Left := LeftFig;
+              RectJug.Top := TopFig * i + 30 * (i-1);
+              RectJug.Height := 20;
+              RectJug.Width := round(MaxW * (RGeneral.LPuntajes[i] / PtsMax));
+            end;
+          DiagramaG.Visible := True;
+        end;
+    end;
 end;
 
 
