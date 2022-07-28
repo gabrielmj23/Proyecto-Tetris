@@ -10,6 +10,7 @@ type
 
   { TTetris }
   TTetris = class(TForm)
+    BGenRJugador: TButton;
     BRegistrar: TButton;
     BInicioSesion: TButton;
     BRegistrarse: TButton;
@@ -37,7 +38,25 @@ type
     Campo_claveR: TEdit;
     CeroTxt: TLabel;
     CajaPaises: TComboBox;
+    FondoRJug: TImage;
+    ImgRepJugador: TImage;
+    IngJugador: TEdit;
     FondoRepG: TImage;
+    LabelNComp: TLabel;
+    LabelPtsJuego: TLabel;
+    LabelUsuario: TLabel;
+    LabelCorreo: TLabel;
+    LabelPais: TLabel;
+    LabelPuntos: TLabel;
+    CajaDatos: TPanel;
+    TituloJuegos: TLabel;
+    LabelCodigo: TLabel;
+    LabelF: TLabel;
+    LabelH: TLabel;
+    MsjDirectorio1: TLabel;
+    MsjSalida1: TLabel;
+    CajaJuegos: TScrollBox;
+    SelDirectorio1: TDirectoryEdit;
     SelPaisR: TLabel;
     PMax: TLabel;
     MsjSalida: TLabel;
@@ -52,7 +71,10 @@ type
     JuegoConcluido: TLabel;
     MsjDirectorio: TLabel;
     PRepGeneral: TTabSheet;
+    PRepJugador: TTabSheet;
+    SelJugador: TLabel;
     TxtErrorRep: TLabel;
+    TxtErrorRep1: TLabel;
     TxtPuntajeRes: TLabel;
     ResumenJuego: TTabSheet;
     TimerGrav: TTimer;
@@ -104,6 +126,7 @@ type
     procedure BEstadClick(Sender: TObject);
     procedure BFinalClick(Sender: TObject);
     procedure BGenReporteClick(Sender: TObject);
+    procedure BGenRJugadorClick(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
     procedure BJugarOtraClick(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
@@ -128,6 +151,7 @@ type
     procedure PantallasChange(Sender: TObject);
     procedure PantJuegoShow(Sender: TObject);
     procedure PRepGeneralShow(Sender: TObject);
+    procedure PRepJugadorShow(Sender: TObject);
     procedure ResumenJuegoShow(Sender: TObject);
     procedure TimerGravTimer(Sender: TObject);
     procedure TimerJuegoTimer(Sender: TObject);
@@ -899,7 +923,9 @@ begin
           PMax.Caption := IntToStr(PtsMax);
           PMax.Visible := True;
           // Generar uno a uno los elementos del diagrama
-          for i := 1 to NJugadores do
+          while DiagramaG.ControlCount > 0 do
+            DiagramaG.Controls[0].Free;
+          for i := 0 to NJugadores-1 do
             begin
               // Crear label con usuario
               LabelNom := TLabel.Create(Self);
@@ -920,6 +946,118 @@ begin
               RectJug.Width := round(MaxW * (RGeneral.LPuntajes[i] / PtsMax));
             end;
           DiagramaG.Visible := True;
+        end;
+    end;
+end;
+
+procedure TTetris.PRepJugadorShow(Sender: TObject);
+begin
+  TxtErrorRep1.Visible := False;
+  MsjSalida1.Visible := False;
+  CajaDatos.Visible := False;
+  CajaJuegos.Visible := False;
+end;
+
+// Manejar petición para reporte de jugador
+procedure TTetris.BGenRJugadorClick(Sender: TObject);
+const
+  TopLinea = 94;
+  LeftCod = 210;
+  LeftFecha = 360;
+  LeftHora = 496;
+  LeftPuntos = 640;
+var
+  RJugador: RepJugador;
+  NJuegos, i: DWord;
+  LabelCod, LabelFecha, LabelHora, LabelPts: TLabel;
+begin
+  // Verificar que seleccionó directorio
+  if (SelDirectorio1.Directory = '(Sin seleccionar)') or (SelDirectorio1.Directory = '') then
+    begin
+      MsjSalida.Visible := False;
+      CajaJuegos.Visible := False;
+      TxtErrorRep1.Caption := 'Debe seleccionar una carpeta';
+      TxtErrorRep1.Visible := True;
+    end
+  // Verificar que seleccionó jugador
+  else if (IngJugador.Text = '') then
+    begin
+      MsjSalida.Visible := False;
+      CajaDatos.Visible := False;
+      CajaJuegos.Visible := False;
+      TxtErrorRep1.Caption := 'Debe ingresar un usuario';
+      TxtErrorRep1.Visible := True;
+    end
+  else
+    begin
+      TxtErrorRep.Visible := False;
+      RJugador := reporteJugador(SelDirectorio1.Directory, IngJugador.Text);
+      // Dar mensaje si no existe el usuario
+      if not RJugador.JugExiste then
+        begin
+          MsjSalida.Caption := 'El jugador ingresado no se encontró';
+          MsjSalida.Visible := True;
+          CajaJuegos.Visible := False;
+        end
+      else
+        begin
+          MsjSalida.Caption := 'Se generó el reporte como ' + RJugador.NArchivo;
+          MsjSalida.Visible := True;
+          // Cargar datos en la caja de datos
+          with RJugador.JugSolicitado do
+            begin
+              LabelNComp.Caption := 'Nombre completo: ' + NombreComp;
+              LabelUsuario.Caption := 'Usuario: ' + Usuario;
+              LabelCorreo.Caption := 'Correo: ' + Correo;
+              LabelPais.Caption := 'País de origen: ' + NomPaises[IndPais];
+              LabelPuntos.Caption := 'Puntos acumulados: ' + IntToStr(puntosJugador(Usuario));
+            end;
+          // Cargar juegos en la caja de juegos
+          while CajaJuegos.ControlCount > 0 do
+            CajaJuegos.Controls[0].Free;
+          NJuegos := length(RJugador.LJuegos);
+          for i := 0 to NJuegos-1 do
+            begin
+              // Crear labels
+              LabelCod := TLabel.Create(Self);
+              LabelCod.Parent := CajaJuegos;
+              LabelFecha := TLabel.Create(Self);
+              LabelFecha.Parent := CajaJuegos;
+              LabelHora := TLabel.Create(Self);
+              LabelHora.Parent := CajaJuegos;
+              LabelPts := TLabel.Create(Self);
+              LabelPts.Parent := CajaJuegos;
+              // Establecer propiedades
+              LabelCod.Font.Size := 11;
+              LabelCod.Font.Name := 'OCR A Extended';
+              LabelCod.Font.Color := clWhite;
+              LabelFecha.Font.Size := 11;
+              LabelFecha.Font.Name := 'OCR A Extended';
+              LabelFecha.Font.Color := clWhite;
+              LabelHora.Font.Size := 11;
+              LabelHora.Font.Name := 'OCR A Extended';
+              LabelHora.Font.Color := clWhite;
+              LabelPts.Font.Size := 11;
+              LabelPts.Font.Name := 'OCR A Extended';
+              LabelPts.Font.Color := clWhite;
+              // Establecer posiciones
+              LabelCod.Top := TopLinea * i + 30 * (i-1);
+              LabelFecha.Top := TopLinea * i + 30 * (i-1);
+              LabelHora.Top := TopLinea * i + 30 * (i-1);
+              LabelPts.Top := TopLinea * i + 30 * (i-1);
+              LabelCod.Left := LeftCod;
+              LabelFecha.Left := LeftFecha;
+              LabelHora.Left := LeftHora;
+              LabelPts.Left := LeftPuntos;
+              // Mostrar mensajes
+              with RJugador.LJuegos[i] do
+                begin
+                  LabelCod.Caption := IntToStr(Codigo);
+                  LabelFecha.Caption := Fecha;
+                  LabelHora.Caption := Hora;
+                  LabelPts.Caption := IntToStr(PtsGanados);
+                end;
+            end;
         end;
     end;
 end;
