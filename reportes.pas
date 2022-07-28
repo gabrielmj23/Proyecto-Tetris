@@ -325,6 +325,7 @@ implementation
       begin
         setLength(topGlobal.Top, 0);
         setLength(topGlobal.LPuntajes, 0);
+        topGlobal.CantJugadores := 0;
       end
     else
       begin
@@ -414,6 +415,7 @@ implementation
       begin
         setLength(topPais.Top, 0);
         setLength(topPais.LPuntajes, 0);
+        topPais.CantJugadores := 0;
       end
     else
       begin
