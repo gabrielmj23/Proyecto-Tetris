@@ -10,28 +10,29 @@ type
 
   { TTetris }
   TTetris = class(TForm)
+    BConfirmar: TImage;
+    BEstadisticas: TImage;
     BGenRJugador: TButton;
     BGenTop5: TButton;
-    BRegistrar: TButton;
-    BInicioSesion: TButton;
-    BRegistrarse: TButton;
-    BEstadisticas: TButton;
-    BReportePais: TButton;
-    BReporteJug: TButton;
-    BTop5Global: TButton;
-    BTop5Pais: TButton;
-    BSalir: TButton;
-    BReporteGlobal: TButton;
+    BInicioSesion: TImage;
+    BRegistrar: TImage;
+    BRegistrarse: TImage;
+    BReporteGlobal: TImage;
+    BReporteJug: TImage;
+    BReportePais: TImage;
+    BSalir: TImage;
+    BTop5Global: TImage;
     BotonJugar: TButton;
     BJugarOtra: TButton;
     BEstad: TButton;
     BFinal: TButton;
     BGenReporte: TButton;
-    Bvolver: TButton;
-    BConfirmar: TButton;
-    Bvolver1: TButton;
-    Bvolver2: TButton;
+    BTop5Pais: TImage;
+    Bvolver: TImage;
+    Bvolver1: TImage;
+    Bvolver2: TImage;
     CajaPaises1: TComboBox;
+    CajaPaises2: TComboBox;
     campo_usuario: TEdit;
     Campo_clave: TEdit;
     Campo_NombreC: TEdit;
@@ -42,9 +43,16 @@ type
     CajaPaises: TComboBox;
     FondoRJug: TImage;
     FondoTops: TImage;
+    ImgParche1: TImage;
+    ImgPais: TImage;
+    ImgParche2: TImage;
+    TituloSesion: TImage;
+    ImgParche: TImage;
     ImgRepJugador: TImage;
     IngJugador: TEdit;
     FondoRepG: TImage;
+    TituloReg: TImage;
+    TituloEstadisticas: TImage;
     TituloTop: TLabel;
     LabelNComp: TLabel;
     LabelPtsJuego: TLabel;
@@ -108,13 +116,12 @@ type
     TxtCantidad: TLabel;
     TxtPiezas: TLabel;
     TxtModo: TLabel;
-    ListaPaises: TCheckListBox;
-    Image1: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Image5: TImage;
-    i_USUARIO: TImage;
+    ImgClave: TImage;
+    ImgNombre: TImage;
+    ImgUser: TImage;
+    ImgCorreo: TImage;
+    ImgClaveR: TImage;
+    ImgUsuario: TImage;
     FondoJuego: TImage;
     ImgODS: TImage;
     ImgSigPieza: TImage;
@@ -134,16 +141,42 @@ type
     Estadisticas: TTabSheet;
     PantJuego: TTabSheet;
     DatosJug: TLabel;
-    procedure BEstadClick(Sender: TObject);
-    procedure BFinalClick(Sender: TObject);
+    procedure BConfirmarMouseEnter(Sender: TObject);
+    procedure BEstadisticasClick(Sender: TObject);
+    procedure BEstadisticasMouseEnter(Sender: TObject);
+    procedure BEstadisticasMouseLeave(Sender: TObject);
     procedure BGenReporteClick(Sender: TObject);
     procedure BGenRJugadorClick(Sender: TObject);
     procedure BGenTop5Click(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
+    procedure BInicioSesionMouseEnter(Sender: TImage);
+    procedure BInicioSesionMouseLeave(Sender: TImage);
     procedure BJugarOtraClick(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
+    procedure BRegistrarseMouseEnter(Sender: TImage);
+    procedure BRegistrarseMouseLeave(Sender: TImage);
+    procedure BReporteGlobalClick(Sender: TObject);
+    procedure BReporteGlobalMouseEnter(Sender: TObject);
+    procedure BReporteGlobalMouseLeave(Sender: TObject);
+    procedure BReporteJugClick(Sender: TObject);
+    procedure BReporteJugMouseEnter(Sender: TObject);
+    procedure BReporteJugMouseLeave(Sender: TObject);
+    procedure BReportePaisClick(Sender: TObject);
+    procedure BReportePaisMouseEnter(Sender: TObject);
+    procedure BReportePaisMouseLeave(Sender: TObject);
+    procedure BSalirClick(Sender: TObject);
+    procedure BSalirMouseEnter(Sender: TObject);
+    procedure BSalirMouseLeave(Sender: TObject);
+    procedure BTop5GlobalClick(Sender: TObject);
+    procedure BTop5GlobalMouseEnter(Sender: TObject);
+    procedure BTop5GlobalMouseLeave(Sender: TObject);
+    procedure BTop5PaisClick(Sender: TObject);
+    procedure BTop5PaisMouseEnter(Sender: TObject);
+    procedure BTop5PaisMouseLeave(Sender: TObject);
     procedure BvolverClick(Sender: TObject);
+    procedure BvolverMouseEnter(Sender: TImage);
+    procedure BvolverMouseLeave(Sender: TImage);
     procedure ConfJuegoShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -159,7 +192,6 @@ type
     procedure ImgSonidoClick(Sender: TObject);
     procedure ImgTiempoClick(Sender: TObject);
     procedure ListaODSItemClick(Sender: TObject; Index: integer);
-    procedure ListaPaisesItemClick(Sender: TObject; Index: integer);
     procedure PantallasChange(Sender: TObject);
     procedure PantJuegoShow(Sender: TObject);
     procedure PRepGeneralShow(Sender: TObject);
@@ -392,6 +424,17 @@ end;
 procedure TTetris.BInicioSesionClick(Sender: TObject);
 begin
  inicioSesion.show;
+ Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BInicioSesionMouseEnter(Sender: TImage);
+begin
+  Sender.picture.LoadFromFile('img/botones/BinicioS2.png');
+end;
+
+procedure TTetris.BInicioSesionMouseLeave(Sender: TImage);
+begin
+  Sender.picture.loadfromfile('img/botones/BinicioS1.png');
 end;
 
 // Procedimiento que valida configuración de juego y devuelve mensaje de error si hay algo mal
@@ -449,7 +492,7 @@ begin
     begin
       // Ocultar error si está visible y llevar a juego principal
       TxtError.Visible := False;
-      Pantallas.ActivePageIndex := 4;
+      PantJuego.Show;
       Pantallas.OnChange(Pantallas);
     end;
 end;
@@ -457,11 +500,134 @@ end;
 procedure TTetris.BRegistrarseClick(Sender: TObject);
 begin
   registracion.show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BRegistrarseMouseEnter(Sender: TImage);
+begin
+  Sender.picture.loadfromfile('img/botones/Bregistrarse2.png');
+end;
+
+procedure TTetris.BRegistrarseMouseLeave(Sender: TImage);
+begin
+  Sender.picture.loadfromfile('img/botones/Bregistrarse1.png');
+end;
+
+procedure TTetris.BReporteGlobalClick(Sender: TObject);
+begin
+  ModoReporte := 1;
+  PRepGeneral.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BReporteGlobalMouseEnter(Sender: TObject);
+begin
+  BReporteGlobal.picture.loadfromfile('img/botones/BreporteG2.png');
+end;
+
+procedure TTetris.BReporteGlobalMouseLeave(Sender: TObject);
+begin
+  BReporteGlobal.picture.loadfromfile('img/botones/BreporteG1.png');
+end;
+
+procedure TTetris.BReporteJugClick(Sender: TObject);
+begin
+  ModoReporte := 3;
+  PRepJugador.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BReporteJugMouseEnter(Sender: TObject);
+begin
+  BReporteJug.picture.loadfromfile('img/botones/BreporteJ2.png');
+
+end;
+
+procedure TTetris.BReporteJugMouseLeave(Sender: TObject);
+begin
+  BReporteJug.picture.loadfromfile('img/botones/BreporteJ1.png');
+end;
+
+procedure TTetris.BReportePaisClick(Sender: TObject);
+begin
+  ModoReporte := 2;
+  PRepGeneral.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BReportePaisMouseEnter(Sender: TObject);
+begin
+  BReportePais.picture.loadfromfile('img/botones/BreporteP2.png');
+end;
+
+procedure TTetris.BReportePaisMouseLeave(Sender: TObject);
+begin
+  BReportePais.picture.loadfromfile('img/botones/BreporteP1.png');
+end;
+
+procedure TTetris.BSalirClick(Sender: TObject);
+begin
+  Tetris.Close;
+end;
+
+procedure TTetris.BSalirMouseEnter(Sender: TObject);
+begin
+  BSalir.picture.loadfromfile('img/botones/BSalir2.png');
+end;
+
+procedure TTetris.BSalirMouseLeave(Sender: TObject);
+begin
+  BSalir.picture.loadfromfile('img/botones/BSalir1.png');
+end;
+
+procedure TTetris.BTop5GlobalClick(Sender: TObject);
+begin
+  ModoReporte := 4;
+  PTop5.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BTop5GlobalMouseEnter(Sender: TObject);
+begin
+  BTop5Global.picture.loadfromfile('img/botones/BTop5G2.png');
+end;
+
+procedure TTetris.BTop5GlobalMouseLeave(Sender: TObject);
+begin
+  BTop5Global.picture.loadfromfile('img/botones/BTop5G1.png');
+end;
+
+procedure TTetris.BTop5PaisClick(Sender: TObject);
+begin
+  ModoReporte := 5;
+  PTop5.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BTop5PaisMouseEnter(Sender: TObject);
+begin
+  BTop5Pais.picture.loadfromfile('img/botones/BTop5P2.png');
+end;
+
+procedure TTetris.BTop5PaisMouseLeave(Sender: TObject);
+begin
+  BTop5Pais.picture.loadfromfile('img/botones/BTop5P1.png')
 end;
 
 procedure TTetris.BvolverClick(Sender: TObject);
 begin
  PantallaInicial.show;
+ Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BvolverMouseEnter(Sender: TImage);
+begin
+  Sender.picture.loadfromfile('img/botones/Bvolver2.png');
+end;
+
+procedure TTetris.BvolverMouseLeave(Sender: TImage);
+begin
+  Sender.picture.loadfromfile('img/botones/Bvolver1.png');
 end;
 
 procedure TTetris.ConfJuegoShow(Sender: TObject);
@@ -493,18 +659,6 @@ begin
   ImgPieza6.Picture.LoadFromFile('img/piezas/pieza6.png');
   ImgPieza7.Picture.LoadFromFile('img/piezas/pieza7.png');
   ImgPieza8.Picture.LoadFromFile('img/piezas/pieza8.png');
-end;
-
-procedure TTetris.ListaPaisesItemClick(Sender: TObject; Index: integer);
-  var
-  Contador : integer;
-begin
-  ListaPaises:=TCheckListBox(Sender);
-  for Contador:= 0 to ListaPaises.Items.Count-1 do
-    begin
-      if (Contador<>Index) then
-        ListaPaises.Checked[Contador]:= false;
-    end;
 end;
 
 // Procedimiento que, para cada columna, halla la altura máxima de la pieza que puede ir ahí
@@ -612,7 +766,7 @@ begin
   // El juego ha terminado, almacenar datos y pasar a resumen de partida
   if not JuegoActivo then
     begin
-      Tetris.Pantallas.ActivePageIndex := 5;
+      Tetris.ResumenJuego.Show;
       Tetris.Pantallas.OnChange(Tetris.Pantallas);
       Tetris.TimerGrav.Enabled := False;
       Tetris.TimerJuego.Enabled := False;
@@ -824,7 +978,7 @@ begin
       TimerJuego.Enabled := False;
       JuegoActivo := False;
       TimerGrav.Enabled := False;
-      Pantallas.ActivePageIndex := 5;
+      ResumenJuego.Show;
       Pantallas.OnChange(Pantallas);
       guardarJuego(JugActual.Usuario, Puntaje);
     end;
@@ -837,17 +991,29 @@ end;
 
 procedure TTetris.BJugarOtraClick(Sender: TObject);
 begin
-  Pantallas.ActivePageIndex := 3;
+  ConfJuego.Show;
+  Pantallas.OnChange(Pantallas);
 end;
 
-procedure TTetris.BEstadClick(Sender: TObject);
+procedure TTetris.BConfirmarMouseEnter(Sender: TObject);
 begin
-  Pantallas.ActivePageIndex := 6;
+  BConfirmar.picture.loadfromfile('img/botones/BinicioS2.png');
 end;
 
-procedure TTetris.BFinalClick(Sender: TObject);
+procedure TTetris.BEstadisticasClick(Sender: TObject);
 begin
-  Tetris.Close;
+  estadisticas.show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BEstadisticasMouseEnter(Sender: TObject);
+begin
+  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas2.png');
+end;
+
+procedure TTetris.BEstadisticasMouseLeave(Sender: TObject);
+begin
+  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas1.png');
 end;
 
 procedure TTetris.PRepGeneralShow(Sender: TObject);
