@@ -353,21 +353,21 @@ implementation
             // Inicializar arreglos
             setLength(topGlobal.Top, CtJugadores);
             setLength(topGlobal.LPuntajes, CtJugadores);
-            for i := 1 to CtJugadores do
+            for i := 0 to CtJugadores-1 do
               topGlobal.LPuntajes[i] := 0;
             // Recorrer archivo de jugadores y crear top
             while not eof(Jugadores) do
               begin
                 read(Jugadores, JugActual);
-                i := 1;
+                i := 0;
                 JugEntra := False;
                 PtsJug := puntosJugador(JugActual.Usuario);
-                while (i <= CtJugadores) and (not JugEntra) do
+                while (i <= CtJugadores-1) and (not JugEntra) do
                   begin
                     if PtsJug >= topGlobal.LPuntajes[i] then
                       begin
                         JugEntra := True;
-                        for j := CtJugadores downto i+1 do
+                        for j := CtJugadores-1 downto i+1 do
                           begin
                             // Bajar jugadores del top
                             topGlobal.Top[j] := topGlobal.Top[j-1];
@@ -383,7 +383,7 @@ implementation
             closeFile(Jugadores);
             // Escribir top en el reporte
             writeln(Reporte, ' POSICION |         NOMBRE            |    USUARIO    |             CORREO             |     PAIS      |    PUNTAJE');
-            for i := 1 to CtJugadores do
+            for i := 0 to CtJugadores-1 do
               with topGlobal.Top[i] do
                 begin
                   write(Reporte, llenarBlancos(IntToStr(i), 10) + '|');
@@ -449,41 +449,45 @@ implementation
             // Inicializar arreglos
             setLength(topPais.Top, CtJugadores);
             setLength(topPais.LPuntajes, CtJugadores);
-            for i := 1 to CtJugadores do
+            for i := 0 to CtJugadores-1 do
               topPais.LPuntajes[i] := 0;
             // Abrir archivo de jugadores y recorrerlo para generar top
             reset(Jugadores);
             while not eof(Jugadores) do
               begin
                 read(Jugadores, JugAct);
-                i := 1;
-                JugEntra := False;
-                PtsJug := puntosJugador(JugAct.Usuario);
-                while (i <= CtJugadores) and (not JugEntra) do
+                // Solo considerar si pertenece al país
+                if NomPaises[JugAct.IndPais] = Pais then
                   begin
-                    if PtsJug >= topPais.LPuntajes[i] then
+                    i := 0;
+                    JugEntra := False;
+                    PtsJug := puntosJugador(JugAct.Usuario);
+                    while (i <= CtJugadores-1) and (not JugEntra) do
                       begin
-                        for j := CtJugadores downto i+1 do
+                        if PtsJug >= topPais.LPuntajes[i] then
                           begin
-                            // Bajar jugadores del top
-                            topPais.Top[j] := topPais.Top[j-1];
-                            topPais.LPuntajes[j] := topPais.LPuntajes[j-1];
+                            for j := CtJugadores-1 downto i+1 do
+                              begin
+                                // Bajar jugadores del top
+                                topPais.Top[j] := topPais.Top[j-1];
+                                topPais.LPuntajes[j] := topPais.LPuntajes[j-1];
+                              end;
+                            // Actualizar posición en la que se inserta el jugador
+                            topPais.Top[i] := JugAct;
+                            topPais.LPuntajes[i] := PtsJug;
                           end;
-                        // Actualizar posición en la que se inserta el jugador
-                        topPais.Top[i] := JugAct;
-                        topPais.LPuntajes[i] := PtsJug;
+                        i := i+1;
                       end;
-                    i := i+1;
                   end;
               end;
             closeFile(Jugadores);
             // Escribir top en el reporte
             writeln(Reporte, ' POSICION |          NOMBRE          |    USUARIO    |             CORREO             |    PUNTAJE');
-            for i := 1 to CtJugadores do
+            for i := 0 to CtJugadores-1 do
               with topPais.Top[i] do
                 begin
                   write(Reporte, llenarBlancos(IntToStr(i), 10) + '|');
-                  write(Reporte, llenarBlancos(NombreComp, 27) + '|');
+                  write(Reporte, llenarBlancos(NombreComp, 26) + '|');
                   write(Reporte, llenarBlancos(Usuario, 15) + '|');
                   write(Reporte, llenarBlancos(Correo, 32) + '|');
                   writeln(Reporte, llenarBlancos(intToStr(puntosJugador(Usuario)), 15));

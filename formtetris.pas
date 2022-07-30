@@ -46,6 +46,8 @@ type
     ImgParche1: TImage;
     ImgPais: TImage;
     ImgParche2: TImage;
+    ErrorSesion: TLabel;
+    ErrorReg: TLabel;
     TituloSesion: TImage;
     ImgParche: TImage;
     ImgRepJugador: TImage;
@@ -141,6 +143,7 @@ type
     Estadisticas: TTabSheet;
     PantJuego: TTabSheet;
     DatosJug: TLabel;
+    procedure BConfirmarClick(Sender: TObject);
     procedure BConfirmarMouseEnter(Sender: TObject);
     procedure BEstadisticasClick(Sender: TObject);
     procedure BEstadisticasMouseEnter(Sender: TObject);
@@ -153,6 +156,7 @@ type
     procedure BInicioSesionMouseLeave(Sender: TImage);
     procedure BJugarOtraClick(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
+    procedure BRegistrarClick(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
     procedure BRegistrarseMouseEnter(Sender: TImage);
     procedure BRegistrarseMouseLeave(Sender: TImage);
@@ -213,7 +217,7 @@ implementation
 {$R *.lfm}
 
 uses
-  tiposYConst, guardarJuegos, reportes, MMSystem;
+  tiposYConst, usuarios, guardarJuegos, reportes, MMSystem;
 
 var
   // Uso General
@@ -493,6 +497,51 @@ begin
       // Ocultar error si está visible y llevar a juego principal
       TxtError.Visible := False;
       PantJuego.Show;
+      Pantallas.OnChange(Pantallas);
+    end;
+end;
+
+procedure TTetris.BRegistrarClick(Sender: TObject);
+var
+  ResUsuario, ResCorreo, ResClave: Boolean;
+begin
+  with JugActual do
+    begin
+      NombreComp := Campo_NombreC.Text;
+      Usuario := campo_UsuarioR.Text;
+      Correo := campo_correo.Text;
+      Clave := Campo_claveR.Text;
+      IndPais := CajaPaises2.ItemIndex+1;
+    end;
+  ResUsuario := validarUsuario(JugActual);
+  ResCorreo := validarCorreo(JugActual);
+  ResClave := validarClave(JugActual);
+  // Revisar errores de validación
+  if trim(JugActual.NombreComp) = '' then
+    begin
+      ErrorReg.Caption := 'El nombre no puede estar vacío';
+      ErrorReg.Visible := True;
+    end
+  else if not ResUsuario then
+    begin
+      ErrorReg.Caption := 'El usuario ya existe o no se ingresó';
+      ErrorReg.Visible := True;
+    end
+  else if not ResCorreo then
+    begin
+      ErrorReg.Caption := 'El correo no es válido o no se ingresó';
+      ErrorReg.Visible := True;
+    end
+  else if not ResClave then
+    begin
+      ErrorReg.Caption := 'La clave no es válida o no se ingresó';
+      ErrorReg.Visible := True;
+    end
+  else
+    begin
+      ErrorReg.Visible := False;
+      registro(JugActual);
+      // Cambiar a pantalla de Jugar-Estadísticas-CerrarSesión
       Pantallas.OnChange(Pantallas);
     end;
 end;
@@ -907,16 +956,13 @@ end;
 // Procedimiento para iniciar el juego
 procedure TTetris.PantJuegoShow(Sender: TObject);
 var
-  Formato: String;
+  Formato: String[63];
   i, j: Byte;
 begin
-  // PARA PRUEBAS: Inicializar jugador
+  // Mostrar datos del jugador
   with JugActual do
     begin
-      NombreComp := 'Nombre';
-      Usuario := 'Usuario';
-      IndPais := 3;
-      Formato := 'Jugador: %0:-S (%1:-S)   Pais: %2:-S   Puntos acumulados: %3-D';
+      Formato := 'Jugador: %0:-S (%1:-S)   País: %2:-S   Puntos acumulados: %3-D';
       DatosJug.Caption := Format(Formato, [NombreComp, Usuario, CodPaises[IndPais], puntosJugador(Usuario)]);
     end;
   // Mostrar tiempo o contador de jugadas
@@ -1000,6 +1046,20 @@ begin
   BConfirmar.picture.loadfromfile('img/botones/BinicioS2.png');
 end;
 
+procedure TTetris.BConfirmarClick(Sender: TObject);
+begin
+  JugActual.Usuario := campo_usuario.Text;
+  JugActual.Clave := Campo_clave.Text;
+  if validarSesion(JugActual) then
+    begin
+      ErrorSesion.Visible := False;
+      // Cambiar a pantalla de Jugar-Estadísticas-CerrarSesión
+      Pantallas.OnChange(Pantallas);
+    end
+  else
+    ErrorSesion.Visible := True;
+end;
+
 procedure TTetris.BEstadisticasClick(Sender: TObject);
 begin
   estadisticas.show;
@@ -1056,8 +1116,8 @@ procedure TTetris.BGenReporteClick(Sender: TObject);
 const
   LeftLab = 24;
   TopLab = 40;
-  LeftFig = 200;
-  TopFig = 32;
+  LeftFig = 205;
+  TopFig = 38;
   MaxW = 823;
 var
   RGeneral: RepGeneral;
@@ -1121,7 +1181,7 @@ begin
               RectJug.Shape := stRectangle;
               RectJug.Left := LeftFig;
               RectJug.Top := TopFig * (i+1) + 30 * i;
-              RectJug.Height := 20;
+              RectJug.Height := 28;
               RectJug.Width := round(MaxW * (RGeneral.LPuntajes[i] / PtsMax));
             end;
           DiagramaG.Visible := True;
@@ -1156,7 +1216,7 @@ begin
       TxtErrorRep1.Visible := True;
     end
   // Verificar que seleccionó jugador
-  else if (IngJugador.Text = '') then
+  else if (trim(IngJugador.Text) = '') then
     begin
       MsjSalida1.Visible := False;
       CajaDatos.Visible := False;
@@ -1188,9 +1248,11 @@ begin
               LabelPais.Caption := 'País de origen: ' + NomPaises[IndPais];
               LabelPuntos.Caption := 'Puntos acumulados: ' + IntToStr(puntosJugador(Usuario));
             end;
+          CajaDatos.Visible := True;
+          // Limpiar juegos anteriores
+          while CajaJuegos.ControlCount > 5 do
+            CajaJuegos.Controls[5].Free;
           // Cargar juegos en la caja de juegos
-          while CajaJuegos.ControlCount > 0 do
-            CajaJuegos.Controls[0].Free;
           NJuegos := length(RJugador.LJuegos);
           for i := 0 to NJuegos-1 do
             for j := 1 to 4 do
@@ -1198,7 +1260,7 @@ begin
                 LineaDatos[j] := TLabel.Create(Self);
                 LineaDatos[j].Parent := CajaJuegos;
                 LineaDatos[j].Left := Lefts[j];
-                LineaDatos[j].Top := TopLinea * (i+1) + 30 * i;
+                LineaDatos[j].Top := TopLinea + 30 * i;
                 LineaDatos[j].Font.Size := 11;
                 LineaDatos[j].Font.Name := 'OCR A Extended';
                 case j of
@@ -1264,6 +1326,7 @@ begin
         begin
           MsjSalida2.Caption := 'No hay jugadores disponibles';
           MsjSalida2.Visible := True;
+          ResultTop5.Visible := False;
         end
       else
         begin
@@ -1280,7 +1343,7 @@ begin
                 LineaTop[j] := TLabel.Create(Self);
                 LineaTop[j].Parent := ResultTop5;
                 LineaTop[j].Left := Lefts[j];
-                LineaTop[j].Top := TopElem * (i+1) + 30 * i;
+                LineaTop[j].Top := TopElem + 30 * i;
                 LineaTop[j].Font.Size := 11;
                 LineaTop[j].Font.Name := 'OCR A Extended';
                 case j of
