@@ -487,7 +487,7 @@ implementation
               with topPais.Top[i] do
                 begin
                   write(Reporte, llenarBlancos(IntToStr(i), 10) + '|');
-                  write(Reporte, llenarBlancos(NombreComp, 26) + '|');
+                  write(Reporte, llenarBlancos(NombreComp, 27) + '|');
                   write(Reporte, llenarBlancos(Usuario, 15) + '|');
                   write(Reporte, llenarBlancos(Correo, 32) + '|');
                   writeln(Reporte, llenarBlancos(intToStr(puntosJugador(Usuario)), 15));

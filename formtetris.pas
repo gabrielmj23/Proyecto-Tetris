@@ -10,11 +10,17 @@ type
 
   { TTetris }
   TTetris = class(TForm)
+    BAtrasConf: TImage;
     BConfirmar: TImage;
+    BEstadResumen: TImage;
     BEstadisticas: TImage;
-    BGenRJugador: TButton;
-    BGenTop5: TButton;
+    BFinal: TImage;
+    BGenReporte: TImage;
+    BGenRJugador: TImage;
+    BGenTop5: TImage;
     BInicioSesion: TImage;
+    BJugarOtra: TImage;
+    BotonJugar: TImage;
     BRegistrar: TImage;
     BRegistrarse: TImage;
     BReporteGlobal: TImage;
@@ -22,11 +28,6 @@ type
     BReportePais: TImage;
     BSalir: TImage;
     BTop5Global: TImage;
-    BotonJugar: TButton;
-    BJugarOtra: TButton;
-    BEstad: TButton;
-    BFinal: TButton;
-    BGenReporte: TButton;
     BTop5Pais: TImage;
     Bvolver: TImage;
     Bvolver1: TImage;
@@ -42,12 +43,20 @@ type
     CeroTxt: TLabel;
     CajaPaises: TComboBox;
     FondoRJug: TImage;
+    FondoMenu: TImage;
     FondoTops: TImage;
+    BAtrasEst: TImage;
+    BJugarM: TImage;
+    BEstadisticasM: TImage;
+    BCerrarSesion: TImage;
     ImgParche1: TImage;
     ImgPais: TImage;
     ImgParche2: TImage;
     ErrorSesion: TLabel;
     ErrorReg: TLabel;
+    ImgParche3: TImage;
+    MsjBienv: TLabel;
+    MenuJug: TTabSheet;
     TituloSesion: TImage;
     ImgParche: TImage;
     ImgRepJugador: TImage;
@@ -143,18 +152,29 @@ type
     Estadisticas: TTabSheet;
     PantJuego: TTabSheet;
     DatosJug: TLabel;
+    procedure BAtrasConfClick(Sender: TObject);
+    procedure BCerrarSesionClick(Sender: TObject);
+    procedure BCerrarSesionMouseEnter(Sender: TObject);
+    procedure BCerrarSesionMouseLeave(Sender: TObject);
     procedure BConfirmarClick(Sender: TObject);
     procedure BConfirmarMouseEnter(Sender: TObject);
     procedure BEstadisticasClick(Sender: TObject);
-    procedure BEstadisticasMouseEnter(Sender: TObject);
-    procedure BEstadisticasMouseLeave(Sender: TObject);
+    procedure BEstadisticasMouseEnter(Sender: TImage);
+    procedure BEstadisticasMouseLeave(Sender: TImage);
     procedure BGenReporteClick(Sender: TObject);
+    procedure BGenReporteMouseEnter(Sender: TImage);
+    procedure BGenReporteMouseLeave(Sender: TImage);
     procedure BGenRJugadorClick(Sender: TObject);
     procedure BGenTop5Click(Sender: TObject);
     procedure BInicioSesionClick(Sender: TObject);
     procedure BInicioSesionMouseEnter(Sender: TImage);
     procedure BInicioSesionMouseLeave(Sender: TImage);
+    procedure BJugarMClick(Sender: TObject);
+    procedure BJugarMMouseEnter(Sender: TImage);
+    procedure BJugarMMouseLeave(Sender: TImage);
     procedure BJugarOtraClick(Sender: TObject);
+    procedure BJugarOtraMouseEnter(Sender: TObject);
+    procedure BJugarOtraMouseLeave(Sender: TObject);
     procedure BotonJugarClick(Sender: TObject);
     procedure BRegistrarClick(Sender: TObject);
     procedure BRegistrarseClick(Sender: TObject);
@@ -170,8 +190,8 @@ type
     procedure BReportePaisMouseEnter(Sender: TObject);
     procedure BReportePaisMouseLeave(Sender: TObject);
     procedure BSalirClick(Sender: TObject);
-    procedure BSalirMouseEnter(Sender: TObject);
-    procedure BSalirMouseLeave(Sender: TObject);
+    procedure BSalirMouseEnter(Sender: TImage);
+    procedure BSalirMouseLeave(Sender: TImage);
     procedure BTop5GlobalClick(Sender: TObject);
     procedure BTop5GlobalMouseEnter(Sender: TObject);
     procedure BTop5GlobalMouseLeave(Sender: TObject);
@@ -182,6 +202,8 @@ type
     procedure BvolverMouseEnter(Sender: TImage);
     procedure BvolverMouseLeave(Sender: TImage);
     procedure ConfJuegoShow(Sender: TObject);
+    procedure BAtrasEstMouseEnter(Sender: TImage);
+    procedure BAtrasEstMouseLeave(Sender: TImage);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ImgJugadasClick(Sender: TObject);
@@ -196,6 +218,7 @@ type
     procedure ImgSonidoClick(Sender: TObject);
     procedure ImgTiempoClick(Sender: TObject);
     procedure ListaODSItemClick(Sender: TObject; Index: integer);
+    procedure MenuJugShow(Sender: TObject);
     procedure PantallasChange(Sender: TObject);
     procedure PantJuegoShow(Sender: TObject);
     procedure PRepGeneralShow(Sender: TObject);
@@ -221,7 +244,7 @@ uses
 
 var
   // Uso General
-  EstadoMusica: Boolean;
+  EstadoMusica, SesionAct: Boolean;
   JugActual: Jugador;
   // Juego principal
   Tablero: Array[1..12, 1..9] of Byte;
@@ -248,6 +271,7 @@ begin
   Pantallas.ActivePageIndex := 0;
   sndPlaySound('musica/MusicaTetris.wav', snd_async or snd_loop);
   EstadoMusica := True;
+  SesionAct := False;
 end;
 
 // Procedimiento para encender/apagar sonido
@@ -425,6 +449,12 @@ begin
     end;
 end;
 
+// Mostrar pantalla de Jugar-Estadísticas-Cerrar sesión
+procedure TTetris.MenuJugShow(Sender: TObject);
+begin
+  MsjBienv.Caption := 'Bienvenido, ' + JugActual.NombreComp;
+end;
+
 procedure TTetris.BInicioSesionClick(Sender: TObject);
 begin
  inicioSesion.show;
@@ -439,6 +469,22 @@ end;
 procedure TTetris.BInicioSesionMouseLeave(Sender: TImage);
 begin
   Sender.picture.loadfromfile('img/botones/BinicioS1.png');
+end;
+
+procedure TTetris.BJugarMClick(Sender: TObject);
+begin
+  ConfJuego.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BJugarMMouseEnter(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Bjugar2.png');
+end;
+
+procedure TTetris.BJugarMMouseLeave(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Bjugar1.png');
 end;
 
 // Procedimiento que valida configuración de juego y devuelve mensaje de error si hay algo mal
@@ -503,7 +549,8 @@ end;
 
 procedure TTetris.BRegistrarClick(Sender: TObject);
 var
-  ResUsuario, ResCorreo, ResClave: Boolean;
+  ResUsuario, ResCorreo: Boolean;
+  ResClave: Byte;
 begin
   with JugActual do
     begin
@@ -532,16 +579,23 @@ begin
       ErrorReg.Caption := 'El correo no es válido o no se ingresó';
       ErrorReg.Visible := True;
     end
-  else if not ResClave then
+  else if ResClave <> 0 then
     begin
-      ErrorReg.Caption := 'La clave no es válida o no se ingresó';
+      case ResClave of
+        1: ErrorReg.Caption := 'Longitud de clave inválida, debe estar entre 8 y 10';
+        2: ErrorReg.Caption := 'La clave debe contener al menos una minúscula';
+        3: ErrorReg.Caption := 'La clave debe contener al menos una mayúscula';
+        4: ErrorReg.Caption := 'La clave debe contener al menos un número';
+        5: ErrorReg.Caption := 'Su clave no tiene caracteres especiales, o son inválidos';
+        6: ErrorReg.Caption := 'La clave no puede tener más de 3 caracteres consecutivos iguales';
+      end;
       ErrorReg.Visible := True;
     end
   else
     begin
       ErrorReg.Visible := False;
       registro(JugActual);
-      // Cambiar a pantalla de Jugar-Estadísticas-CerrarSesión
+      MenuJug.Show;
       Pantallas.OnChange(Pantallas);
     end;
 end;
@@ -619,14 +673,14 @@ begin
   Tetris.Close;
 end;
 
-procedure TTetris.BSalirMouseEnter(Sender: TObject);
+procedure TTetris.BSalirMouseEnter(Sender: TImage);
 begin
-  BSalir.picture.loadfromfile('img/botones/BSalir2.png');
+  Sender.picture.loadfromfile('img/botones/BSalir2.png');
 end;
 
-procedure TTetris.BSalirMouseLeave(Sender: TObject);
+procedure TTetris.BSalirMouseLeave(Sender: TImage);
 begin
-  BSalir.picture.loadfromfile('img/botones/BSalir1.png');
+  Sender.picture.loadfromfile('img/botones/BSalir1.png');
 end;
 
 procedure TTetris.BTop5GlobalClick(Sender: TObject);
@@ -665,7 +719,10 @@ end;
 
 procedure TTetris.BvolverClick(Sender: TObject);
 begin
- PantallaInicial.show;
+ if SesionAct then
+   MenuJug.Show
+ else
+   PantallaInicial.show;
  Pantallas.OnChange(Pantallas);
 end;
 
@@ -710,6 +767,16 @@ begin
   ImgPieza8.Picture.LoadFromFile('img/piezas/pieza8.png');
 end;
 
+procedure TTetris.BAtrasEstMouseEnter(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Batras2.png');
+end;
+
+procedure TTetris.BAtrasEstMouseLeave(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Batras1.png');
+end;
+
 // Procedimiento que, para cada columna, halla la altura máxima de la pieza que puede ir ahí
 procedure DeterminarAltMax();
 var
@@ -742,7 +809,7 @@ var
   i, j: Byte;
   ArchivoImg: String[23];
 begin
-  if Tetris.Pantallas.ActivePageIndex = 4 then
+  if Tetris.Pantallas.ActivePage = Tetris.PantJuego then
     for i := 1 to 12 do
       for j := 1 to 9 do
         begin
@@ -762,7 +829,7 @@ end;
 procedure GenPiezas(ModoJ: Char; VAR IdAct, IdSig: Byte);
 var
   i: Byte;
-  ArchSig: String;
+  ArchBloque, ArchSig: String;
 begin
   if ModoJ = 'J' then
     begin
@@ -793,8 +860,12 @@ begin
 
   // Cargar pieza en tablero
   for i := 1 to 4 do
-    Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
-  MostrarCeldas();
+    begin
+      Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
+      ArchBloque := 'img/bloques/bloque' + IntToStr(PtsPiezaAct) + '.png';
+      GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Picture.LoadFromFile(ArchBloque);
+      GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Visible := True;
+    end;
 
   // Seleccionar archivos de imagen de la siguiente pieza
   ArchSig := 'img/piezas/pieza' + IntToStr(PiezasDisp[IdSig]) + '.png';
@@ -862,7 +933,7 @@ end;
 // Procedimiento que lee la tecla ingresada para el movimiento de la pieza
 procedure TTetris.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Pantallas.ActivePageIndex = 4 then
+  if Pantallas.ActivePage = PantJuego then
     begin
       MoverFila := 0;
       MoverCol := 0;
@@ -914,6 +985,7 @@ begin
   for i := 1 to 12 do
     for j := 1 to 9 do
       TableroColision[i,j] := Tablero[i,j];
+  MostrarCeldas();
 end;
 
 // Procedimiento que maneja la gravedad de la pieza
@@ -921,6 +993,7 @@ procedure TTetris.TimerGravTimer(Sender: TObject);
 var
   i: Byte;
   Colision: Boolean;
+  ArchBloque: String;
 begin
   // Verificar si la pieza ha chocado
   Colision := False;
@@ -933,15 +1006,20 @@ begin
     begin
       // Eliminar valores antiguos del tablero
       for i := 1 to 4 do
-        Tablero[PiezaActual[i,1], PiezaActual[i,2]] := 0;
+        begin
+          Tablero[PiezaActual[i,1], PiezaActual[i,2]] := 0;
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Visible := False;
+        end;
 
       // Movimiento
       for i := 1 to 4 do
         begin
           PiezaActual[i,1] := PiezaActual[i,1] + 1;
           Tablero[PiezaActual[i,1], PiezaActual[i,2]] := PtsPiezaAct;
+          ArchBloque := 'img/bloques/bloque' + IntToStr(PtsPiezaAct) + '.png';
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Picture.LoadFromFile(ArchBloque);
+          GrafTablero[PiezaActual[i,1], PiezaActual[i,2]].Visible := True;
         end;
-      MostrarCeldas();
     end
   else
     begin
@@ -992,13 +1070,13 @@ begin
       begin
         // Inicializar cada imagen, posición y tamaño
         FreeAndNil(GrafTablero[i,j]);
-        GrafTablero[i,j] := TImage.Create(Tetris.Pantallas.ActivePage);
+        GrafTablero[i,j] := TImage.Create(Self);
         GrafTablero[i,j].Left := 240 + (j-1)*50;
         GrafTablero[i,j].Top := 140 + (i-1)*50;
         GrafTablero[i,j].Height := 50;
         GrafTablero[i,j].Width := 50;
         GrafTablero[i,j].Proportional := True;
-        GrafTablero[i,j].Parent := Tetris.Pantallas.ActivePage;
+        GrafTablero[i,j].Parent := Tetris.PantJuego;
         GrafTablero[i,j].Visible := False;
       end;
   //Inicializar puntaje
@@ -1041,6 +1119,16 @@ begin
   Pantallas.OnChange(Pantallas);
 end;
 
+procedure TTetris.BJugarOtraMouseEnter(Sender: TObject);
+begin
+  BJugarOtra.Picture.LoadFromFile('img/botones/BOtraVez2.png');
+end;
+
+procedure TTetris.BJugarOtraMouseLeave(Sender: TObject);
+begin
+  BJugarOtra.Picture.LoadFromFile('img/botones/BOtraVez1.png');
+end;
+
 procedure TTetris.BConfirmarMouseEnter(Sender: TObject);
 begin
   BConfirmar.picture.loadfromfile('img/botones/BinicioS2.png');
@@ -1052,12 +1140,36 @@ begin
   JugActual.Clave := Campo_clave.Text;
   if validarSesion(JugActual) then
     begin
+      SesionAct := True;
       ErrorSesion.Visible := False;
-      // Cambiar a pantalla de Jugar-Estadísticas-CerrarSesión
+      MenuJug.Show;
       Pantallas.OnChange(Pantallas);
     end
   else
     ErrorSesion.Visible := True;
+end;
+
+procedure TTetris.BAtrasConfClick(Sender: TObject);
+begin
+  MenuJug.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BCerrarSesionClick(Sender: TObject);
+begin
+  SesionAct := False;
+  PantallaInicial.Show;
+  Pantallas.OnChange(Pantallas);
+end;
+
+procedure TTetris.BCerrarSesionMouseEnter(Sender: TObject);
+begin
+  BCerrarSesion.Picture.LoadFromFile('img/botones/Bcerrarsesion2.png');
+end;
+
+procedure TTetris.BCerrarSesionMouseLeave(Sender: TObject);
+begin
+  BCerrarSesion.Picture.LoadFromFile('img/botones/Bcerrarsesion1.png');
 end;
 
 procedure TTetris.BEstadisticasClick(Sender: TObject);
@@ -1066,18 +1178,19 @@ begin
   Pantallas.OnChange(Pantallas);
 end;
 
-procedure TTetris.BEstadisticasMouseEnter(Sender: TObject);
+procedure TTetris.BEstadisticasMouseEnter(Sender: TImage);
 begin
-  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas2.png');
+  Sender.picture.loadfromfile('img/botones/BEstadisticas2.png');
 end;
 
-procedure TTetris.BEstadisticasMouseLeave(Sender: TObject);
+procedure TTetris.BEstadisticasMouseLeave(Sender: TImage);
 begin
-  BEstadisticas.picture.loadfromfile('img/botones/BEstadisticas1.png');
+  Sender.picture.loadfromfile('img/botones/BEstadisticas1.png');
 end;
 
 procedure TTetris.PRepGeneralShow(Sender: TObject);
 begin
+  BAtrasEst.Parent := PRepGeneral;
   TxtErrorRep.Visible := False;
   MsjSalida.Visible := False;
   DiagramaG.Visible := False;
@@ -1102,7 +1215,7 @@ begin
       SelPaisR.Visible := True;
       CajaPaises.Visible := True;
       BGenReporte.Top := 152;
-      TxtErrorRep.Top := 152;
+      TxtErrorRep.Top := 160;
       MsjSalida.Top := 208;
       DiagramaG.Top := 272;
       DiagramaG.Height := 464;
@@ -1189,8 +1302,19 @@ begin
     end;
 end;
 
+procedure TTetris.BGenReporteMouseEnter(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Bgenerar2.png');
+end;
+
+procedure TTetris.BGenReporteMouseLeave(Sender: TImage);
+begin
+  Sender.Picture.LoadFromFile('img/botones/Bgenerar1.png');
+end;
+
 procedure TTetris.PRepJugadorShow(Sender: TObject);
 begin
+  BAtrasEst.Parent := PRepJugador;
   TxtErrorRep1.Visible := False;
   MsjSalida1.Visible := False;
   CajaDatos.Visible := False;
@@ -1277,6 +1401,7 @@ end;
 
 procedure TTetris.PTop5Show(Sender: TObject);
 begin
+  BAtrasEst.Parent := PTop5;
   TxtErrorRep2.Visible := False;
   MsjSalida2.Visible := False;
   ResultTop5.Visible := False;
@@ -1293,7 +1418,7 @@ begin
       SelPaisTop.Visible := True;
       CajaPaises1.Visible := True;
       BGenTop5.Top := 152;
-      TxtErrorRep2.Top := 152;
+      TxtErrorRep2.Top := 160;
       MsjSalida2.Top := 208;
     end;
 end;

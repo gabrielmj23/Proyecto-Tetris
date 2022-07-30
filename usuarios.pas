@@ -5,7 +5,7 @@ interface
   uses tiposYConst;
 
   function validarUsuario(JugEntrada: Jugador): Boolean;
-  function validarClave(JugEntrada: Jugador): boolean;
+  function validarClave(JugEntrada: Jugador): byte;
   function validarCorreo(JugEntrada: Jugador): boolean;
   procedure registro(JugEntrada: Jugador);
   function validarSesion(var JugEntrada: Jugador): Boolean;
@@ -40,12 +40,13 @@ begin
 end;
 
 //VALIDACIÓN DE LA CLAVE A REGISTRAR
-function validarClave(JugEntrada: Jugador): boolean;
+function validarClave(JugEntrada: Jugador): byte;
 var
   Ultletra: char;
   i, contig: byte;
   Min, May, Num, CarEsp: boolean;
 begin
+  validarClave := 0;
   // Validar longitud
   if (length(JugEntrada.Clave)>=8) and (length(JugEntrada.Clave)<=10) then
     begin
@@ -58,12 +59,18 @@ begin
             May:= true;
           if (JugEntrada.Clave[i]>='0') and (JugEntrada.Clave[i]<='9') then
             Num:= true;
-          if (JugEntrada.Clave[i]>='=') or (JugEntrada.Clave[i]>='*') or (JugEntrada.Clave[i]>='-') or (JugEntrada.Clave[i]>='_') or (JugEntrada.Clave[i]>='.') then
+          if (JugEntrada.Clave[i]='=') or (JugEntrada.Clave[i]='*') or (JugEntrada.Clave[i]='-') or (JugEntrada.Clave[i]='_') or (JugEntrada.Clave[i]='.') then
             CarEsp:= true;
         end;
-      if  (Min=true) and (May=true) and (Num=true) and (CarEsp=true) then
-        ValidarClave:=true;
-      // Validar que no aparezcan
+      if not Min then
+        validarClave := 2;
+      if not May then
+        validarClave := 3;
+      if not Num then
+        validarClave := 4;
+      if not CarEsp then
+        validarClave := 5;
+      // Validar que no aparezcan más de tres teclas iguales seguidas
       Contig:= 1;
       Ultletra:=' ';
       for i:=1 to length(JugEntrada.Clave) do
@@ -73,10 +80,13 @@ begin
           else
             Contig:=1;
           if (Contig>3) then
-            ValidarClave:=false;
+            ValidarClave:=6;
           Ultletra:=JugEntrada.Clave[i];
         end;
-    end;
+    end
+  else
+    // Longitud de clave inválida
+    validarClave := 1;
 end;
 
 //VALIDACIÓN DEL CORREO A REGISTRAR
