@@ -37,6 +37,10 @@ begin
         validarUsuario := False;
     end;
   closeFile(Jugadores);
+
+  // Revisar que no esté vacío
+  if length(trim(JugEntrada.Usuario)) = 0 then
+    validarUsuario := False;
 end;
 
 //VALIDACIÓN DE LA CLAVE A REGISTRAR
