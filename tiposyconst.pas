@@ -12,7 +12,7 @@ interface
             end;
 
     Jugador = Record
-                NombreComp: String[25];
+                NombreComp: String[40];
                 Usuario: String[12];
                 Clave: String[10];
                 Correo: String[30];
