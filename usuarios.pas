@@ -48,23 +48,43 @@ function validarClave(JugEntrada: Jugador): byte;
 var
   Ultletra: char;
   i, contig: byte;
-  Min, May, Num, CarEsp: boolean;
+  Min, May, Num, CarEsp, Haycambio, Cinvalido: boolean;
 begin
   validarClave := 0;
   // Validar longitud
   if (length(JugEntrada.Clave)>=8) and (length(JugEntrada.Clave)<=10) then
     begin
+      Min:= false;
+      May:= false;
+      Num:= false;
+      CarEsp:= false;
+      Cinvalido := false;
       // Validar que se utilicen caracteres adecuados
       for i:=1 to length(JugEntrada.Clave) do
         begin
+          Haycambio:= false;
           if (JugEntrada.Clave[i]>='a') and (JugEntrada.Clave[i]<='z') then
-            Min:= true;
+            begin
+              Min:= true;
+              Haycambio:= true;
+            end;
           if (JugEntrada.Clave[i]>='A') and (JugEntrada.Clave[i]<='Z') then
-            May:= true;
+            begin
+              May:= true;
+              Haycambio:= true;
+            end;
           if (JugEntrada.Clave[i]>='0') and (JugEntrada.Clave[i]<='9') then
-            Num:= true;
+            begin
+              Num:= true;
+              Haycambio:= true;
+            end;
           if (JugEntrada.Clave[i]='=') or (JugEntrada.Clave[i]='*') or (JugEntrada.Clave[i]='-') or (JugEntrada.Clave[i]='_') or (JugEntrada.Clave[i]='.') then
-            CarEsp:= true;
+            begin
+              CarEsp:= true;
+              Haycambio:= true;
+            end;
+          if not Haycambio then
+            Cinvalido:=true;
         end;
       if not Min then
         validarClave := 2;
@@ -74,6 +94,8 @@ begin
         validarClave := 4;
       if not CarEsp then
         validarClave := 5;
+      if Cinvalido then
+        validarClave := 6;
       // Validar que no aparezcan más de tres teclas iguales seguidas
       Contig:= 1;
       Ultletra:=' ';
@@ -84,7 +106,7 @@ begin
           else
             Contig:=1;
           if (Contig>3) then
-            ValidarClave:=6;
+            ValidarClave:=7;
           Ultletra:=JugEntrada.Clave[i];
         end;
     end

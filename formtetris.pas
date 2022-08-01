@@ -587,7 +587,8 @@ begin
         3: ErrorReg.Caption := 'La clave debe contener al menos una mayúscula';
         4: ErrorReg.Caption := 'La clave debe contener al menos un número';
         5: ErrorReg.Caption := 'Su clave no tiene caracteres especiales, o son inválidos';
-        6: ErrorReg.Caption := 'La clave no puede tener más de 3 caracteres consecutivos iguales';
+        6: ErrorReg.Caption := 'Su clave contiene caracteres inválidos (acento o ñ)';
+        7: ErrorReg.Caption := 'La clave no puede tener más de 3 caracteres consecutivos iguales';
       end;
       ErrorReg.Visible := True;
     end
