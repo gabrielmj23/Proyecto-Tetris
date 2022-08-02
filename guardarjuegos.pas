@@ -21,9 +21,7 @@ implementation
     if FileExists('Juegos.dat') then
       reset(Juegos)
     else
-      begin
-        rewrite(Juegos);
-      end;
+      rewrite(Juegos);
 
     // Generar código según el último guardado
     generarCodigoJuego := 1;

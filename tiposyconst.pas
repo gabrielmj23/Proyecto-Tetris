@@ -22,7 +22,7 @@ interface
     // Para reporte general global y de pais
     RepGeneral = Record
                    LJugadores: Array of Jugador;
-                   LPuntajes: Array of DWord;
+                   LPuntajes: Array of QWord;
                    NArchivo: String;
                  end;
 
@@ -38,7 +38,7 @@ interface
     RepTop5 = Record
                 Top: Array of Jugador;
                 CantJugadores: Byte;  // En caso de que no hallan 5 jugadores en primer lugar
-                LPuntajes: Array of DWord;
+                LPuntajes: Array of QWord;
                 NArchivo: String;
               end;
 
@@ -74,22 +74,22 @@ interface
                                     'ALIANZAS');
     MensajesODS:
       Array[1..17] of String[67] = ('Todos merecemos los recursos para una vida digna',
-                                    'Acabemos con el hambre y la desnutricion en el mundo',
+                                    'Acabemos con el hambre y la desnutrición en el mundo',
                                     'Luchemos por la cobertura universal de salud',
-                                    'La educacion es el motor del desarrollo sostenible',
-                                    'El crecimiento se da sin discriminacion de genero',
+                                    'La educación es el motor del desarrollo sostenible',
+                                    'El crecimiento se da sin discriminación de género',
                                     'El agua potable es indispensable para la vida',
-                                    'La energia limpia nos ayuda a nosotros y al medio ambiente',
+                                    'La energía limpia nos ayuda a nosotros y al medio ambiente',
                                     'Los trabajadores merecen condiciones adecuadas',
                                     'La infraestructura es vital para el desarrollo social y tecnologico',
-                                    'Todos merecemos acceso a los mismos recursos basicos',
+                                    'Todos merecemos acceso a los mismos recursos básicos',
                                     'Nuestras ciudades pueden ser mas limpias y sostenibles',
-                                    'Reciclar y reducir desechos ayuda a disminuir la huella ecologica',
-                                    'Podemos adaptarnos y luchar contra el cambio climatico',
+                                    'Reciclar y reducir desechos ayuda a disminuir la huella ecológica',
+                                    'Podemos adaptarnos y luchar contra el cambio climático',
                                     'Debemos proteger los ecosistemas marinos',
                                     'Es urgente reducir la perdida de biodiversidad',
                                     'Cuidar los derechos humanos es cuidar a la humanidad',
-                                    'Nada se lograra sin trabajo en equipo');
+                                    'Nada se logrará sin trabajo en equipo');
     ImagenesODS:
       Array[1..17] of String[27] = ('img/ods/pobreza.png',
                                     'img/ods/hambrecero.png',

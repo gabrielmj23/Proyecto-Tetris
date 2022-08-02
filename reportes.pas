@@ -466,6 +466,7 @@ implementation
                       begin
                         if PtsJug >= topPais.LPuntajes[i] then
                           begin
+                            JugEntra := True;
                             for j := CtJugadores-1 downto i+1 do
                               begin
                                 // Bajar jugadores del top

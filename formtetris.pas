@@ -406,6 +406,7 @@ begin
   TxtCantidad.Caption := 'Cantidad de jugadas (20 - 50) para jugar';
 end;
 
+// Procedimiento que maneja la selección de ODS
 procedure TTetris.ListaODSItemClick(Sender: TObject; Index: integer);
 var
   i, Seleccionados, IdAntiguo, IdArr: Byte;
@@ -596,6 +597,7 @@ begin
     begin
       ErrorReg.Visible := False;
       registro(JugActual);
+      SesionAct := True;
       MenuJug.Show;
       Pantallas.OnChange(Pantallas);
     end;
@@ -796,7 +798,7 @@ begin
         begin
           if TableroColision[i,j] <> 0 then
             begin
-              AltMax[j] := i;
+              AltMax[j] := i-1;
               Cambiado := True;
             end;
           i := i+1;
@@ -1261,6 +1263,9 @@ begin
           // No hay jugadores disponibles
           MsjSalida.Caption := 'No hay jugadores disponibles';
           MsjSalida.Visible := True;
+          CeroTxt.Visible := False;
+          PMax.Visible := False;
+          DiagramaG.Visible := False;
         end
       else
         begin
@@ -1358,6 +1363,7 @@ begin
         begin
           MsjSalida1.Caption := 'El jugador ingresado no se encontró';
           MsjSalida1.Visible := True;
+          CajaDatos.Visible := False;
           CajaJuegos.Visible := False;
         end
       else
@@ -1424,6 +1430,7 @@ begin
     end;
 end;
 
+// Manejar petición para top 5
 procedure TTetris.BGenTop5Click(Sender: TObject);
 const
   TopElem = 72;
