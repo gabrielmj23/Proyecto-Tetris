@@ -240,7 +240,7 @@ implementation
 {$R *.lfm}
 
 uses
-  tiposYConst, usuarios, guardarJuegos, reportes, MMSystem;
+  tiposYConst, usuarios, guardarJuegos, reportes, MMSystem, crt;
 
 var
   // Uso General
@@ -889,6 +889,7 @@ begin
   // El juego ha terminado, almacenar datos y pasar a resumen de partida
   if not JuegoActivo then
     begin
+      Delay(1000);
       Tetris.ResumenJuego.Show;
       Tetris.Pantallas.OnChange(Tetris.Pantallas);
       Tetris.TimerGrav.Enabled := False;
@@ -1105,6 +1106,7 @@ begin
       TimerJuego.Enabled := False;
       JuegoActivo := False;
       TimerGrav.Enabled := False;
+      Delay(1000);
       ResumenJuego.Show;
       Pantallas.OnChange(Pantallas);
       guardarJuego(JugActual.Usuario, Puntaje);
