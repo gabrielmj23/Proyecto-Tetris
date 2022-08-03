@@ -386,7 +386,7 @@ implementation
             for i := 0 to CtJugadores-1 do
               with topGlobal.Top[i] do
                 begin
-                  write(Reporte, llenarBlancos(IntToStr(i), 10) + '|');
+                  write(Reporte, llenarBlancos(IntToStr(i+1), 10) + '|');
                   write(Reporte, llenarBlancos(NombreComp, 27) + '|');
                   write(Reporte, llenarBlancos(Usuario, 15) + '|');
                   write(Reporte, llenarBlancos(Correo, 32) + '|');
@@ -487,7 +487,7 @@ implementation
             for i := 0 to CtJugadores-1 do
               with topPais.Top[i] do
                 begin
-                  write(Reporte, llenarBlancos(IntToStr(i), 10) + '|');
+                  write(Reporte, llenarBlancos(IntToStr(i+1), 10) + '|');
                   write(Reporte, llenarBlancos(NombreComp, 27) + '|');
                   write(Reporte, llenarBlancos(Usuario, 15) + '|');
                   write(Reporte, llenarBlancos(Correo, 32) + '|');

@@ -837,7 +837,7 @@ begin
   if ModoJ = 'J' then
     begin
       // Está en modo por jugadas
-      if CtRest = -1 then
+      if CtRest = 0 then
         JuegoActivo := False
       else
         begin
